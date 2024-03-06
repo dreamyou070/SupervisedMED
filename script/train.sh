@@ -1,6 +1,5 @@
 # !/bin/bash
 
-
 #pretrained_vae_anomal_nomal_data_with_pe
 #pretrained_vae_anomal_nomal_data_without_pe
 #scratch_vae_anomal_nomal_data_with_pe
