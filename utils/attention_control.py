@@ -8,7 +8,6 @@ def passing_argument(args):
     global only_local_self_attn
     global fixed_window_size
     global argument
-
     argument = args
 
 def register_attention_control(unet: nn.Module,controller: AttentionStore):
