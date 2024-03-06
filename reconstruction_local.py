@@ -54,28 +54,19 @@ scheduler = DDIMScheduler(num_train_timesteps=1000,
 
 def inference(latent,
               tokenizer, text_encoder, unet, controller, normal_activator, position_embedder,
-              args, org_h, org_w, thred, global_conv_net):
+              args, org_h, org_w, thred):
     # [1] text
     input_ids, attention_mask = get_input_ids(tokenizer, args.prompt)
     encoder_hidden_states = text_encoder(input_ids.to(text_encoder.device))["last_hidden_state"]
-    # [2] unet
-    if args.use_position_embedder and args.use_global_conv:
-        unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
-             noise_type=[position_embedder, global_conv_net])
-    elif args.use_position_embedder and not args.use_global_conv:
-        unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
-             noise_type=position_embedder,)
-    else:
-        unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list, )
-
-
-
+    model_kwargs = {}
+    model_kwargs['position_embedder'] = position_embedder
+    unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
+         **model_kwargs)
     query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
     controller.reset()
-    attn_list, origin_query_list, query_list, key_list = [], [], [], []
+    query_list, key_list = [], []
     for layer in args.trg_layer_list:
         query = query_dict[layer][0].squeeze()  # head, pix_num, dim
-        origin_query_list.append(query)
         query_list.append(resize_query_features(query))  # head, pix_num, dim
         key_list.append(key_dict[layer][0])  # head, pix_num, dim
         # attn_list.append(attn_dict[layer][0])
@@ -126,12 +117,6 @@ def main(args):
         if args.all_positional_embedder :
             position_embedder = AllPositionalEmbedding()
 
-    global_conv_net = None
-    if args.use_global_conv :
-        from model.overlapping_conv import AllGCN
-        global_conv_net = AllGCN()
-
-
     print(f'\n step 2. accelerator and device')
     vae.requires_grad_(False)
     vae.to(accelerator.device, dtype=weight_dtype)
@@ -167,11 +152,6 @@ def main(args):
             position_embedder_state_dict = load_file(pretrained_pe_dir)
             position_embedder.load_state_dict(position_embedder_state_dict)
             position_embedder.to(accelerator.device, dtype=weight_dtype)
-
-        if args.use_global_conv:
-            global_net_pretrained_dir = os.path.join(os.path.join(parent, f'global_convolution_network'), f'global_convolution_net_{lora_epoch}.safetensors')
-            global_conv_net.load_state_dict(load_file(global_net_pretrained_dir))
-            global_conv_net.to(accelerator.device, dtype=weight_dtype)
 
         # [2] load network
         anomal_detecting_state_dict = load_file(network_model_dir)
@@ -251,8 +231,7 @@ def main(args):
                                                                                      controller, normal_activator,
                                                                                      position_embedder,
                                                                                      args,
-                                                                                     trg_h, trg_w,
-                                                                                     thred, global_conv_net)
+                                                                                     trg_h, trg_w, thred)
                             cls_map_pil.save(os.path.join(save_base_folder, f'{name}_cls.png'))
                             normal_map_pil.save(os.path.join(save_base_folder, f'{name}_normal.png'))
                             anomaly_map_pil.save( os.path.join(save_base_folder, f'{name}_anomal.png'))
