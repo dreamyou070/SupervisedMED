@@ -132,7 +132,8 @@ def main(args):
             with torch.set_grad_enabled(True):
                 model_kwargs = {}
                 model_kwargs['position_embedder'] = position_embedder
-                unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list, **model_kwargs)
+                unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
+                     **model_kwargs)
             query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
             controller.reset()
             attn_list, query_list, key_list = [], [], []

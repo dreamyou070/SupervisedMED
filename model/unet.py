@@ -325,7 +325,7 @@ class ResnetBlock2D(nn.Module):
         if self.use_in_shortcut:
             self.conv_shortcut = torch.nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0)
 
-    def forward(self, input_tensor, temb,**model_kwargs):
+    def forward(self, input_tensor, temb, position_embedder):
 
         # [1] only hidden state
         hidden_states = input_tensor
@@ -478,7 +478,7 @@ class CrossAttention(nn.Module):
         tensor = tensor.permute(0, 2, 1, 3).reshape(batch_size // head_size, seq_len, dim * head_size)
         return tensor
 
-    def forward(self, hidden_states, context=None, trg_layer_list=None, position_embedder=None):
+    def forward(self, hidden_states, context=None):
         if self.use_memory_efficient_attention_xformers:
             return self.forward_memory_efficient_xformers(hidden_states, context, mask)
         if self.use_memory_efficient_attention_mem_eff:
@@ -1438,10 +1438,12 @@ class UNet2DConditionModel(nn.Module):
                 sample, res_samples = downsample_block(hidden_states=sample,
                                                        temb=emb,
                                                        encoder_hidden_states=encoder_hidden_states,
-                                                       trg_layer_list=trg_layer_list,**model_kwargs)
+                                                       trg_layer_list=trg_layer_list,
+                                                       **model_kwargs)
             else:
                 sample, res_samples = downsample_block(hidden_states=sample,
-                                                       temb=emb,**model_kwargs)
+                                                       temb=emb,
+                                                       **model_kwargs)
             down_block_res_samples += res_samples
 
         # skip connectionにControlNetの出力を追加する
