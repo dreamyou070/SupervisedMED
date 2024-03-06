@@ -5,13 +5,13 @@
 #scratch_vae_anomal_nomal_data_with_pe
 #scratch_vae_anomal_nomal_data_without_pe
 
-port_number=50003
+port_number=50004
 bench_mark="Tuft"
 obj_name='teeth_crop_onlyanormal'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="pretrained_vae_anomal_data_with_pe"
+file_name="pretrained_vae_anomal_data_without_pe"
 
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_config \
  --main_process_port $port_number ../train.py --log_with wandb \
@@ -28,4 +28,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_config \
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
  --attn_loss_weight 1.0 \
  --do_cls_train \
- --normal_weight 1 --use_position_embedder
+ --normal_weight 1
