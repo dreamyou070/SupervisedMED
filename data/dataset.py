@@ -79,7 +79,7 @@ class TrainDataset(Dataset):
             gt_folder = os.path.join(folder_dir, 'gt')
             images = os.listdir(rgb_folder)
             for image in images :
-                for _ in range(repeat) :
+                for _ in range(int(repeat)) :
                     image_path = os.path.join(rgb_folder, image)
                     image_paths.append(image_path)
                     gt_paths.append(os.path.join(gt_folder, image))
