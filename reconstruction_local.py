@@ -112,6 +112,10 @@ def main(args):
     text_encoder, vae, unet, _ = load_target_model(args, weight_dtype,
                                                    accelerator)
 
+    if args.vae_model_dir is not None :
+        vae.load_state_dict(load_file(args.vae_model_dir))
+        vae.to(accelerator.device, dtype=weight_dtype)
+
     position_embedder = None
     if args.use_position_embedder:
         position_embedder = AllPositionalEmbedding()
@@ -347,6 +351,7 @@ if __name__ == '__main__':
     parser.add_argument("--all_self_cross_positional_embedder", action='store_true')
     parser.add_argument("--use_global_conv", action='store_true')
     parser.add_argument("--do_train_check", action='store_true')
+    parser.add_argument("--vae_model_dir", type=str, default=None)
     args = parser.parse_args()
     passing_argument(args)
     unet_passing_argument(args)
