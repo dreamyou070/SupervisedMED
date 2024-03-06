@@ -318,6 +318,7 @@ if __name__ == "__main__":
     parser.add_argument("--on_desktop", action='store_true')
     parser.add_argument("--position_embedder_weights", type=str, default=None)
     parser.add_argument("--vae_model_dir", type=str, default=None)
+    parser.add_argument("--do_attn_loss", action='store_true')
     args = parser.parse_args()
     unet_passing_argument(args)
     passing_argument(args)
