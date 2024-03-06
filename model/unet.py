@@ -757,7 +757,7 @@ class Transformer2DModel(nn.Module):
                 encoder_hidden_states=None,
                 timestep=None, return_dict: bool = True,
                 trg_layer_list=None,
-                noise_type=None,**model_kwargs):
+                **model_kwargs):
         # 1. Input
         batch, _, height, weight = hidden_states.shape
         residual = hidden_states
@@ -847,7 +847,6 @@ class CrossAttnDownBlock2D(nn.Module):
                 temb=None,
                 encoder_hidden_states=None,
                 trg_layer_list=None,
-                noise_type=None,
                 **model_kwargs):
         output_states = ()
         for resnet, attn in zip(self.resnets, self.attentions):
@@ -938,7 +937,8 @@ class UNetMidBlock2DCrossAttn(nn.Module):
             attn.set_use_sdpa(sdpa)
 
     def forward(self, hidden_states, temb=None, encoder_hidden_states=None,
-                trg_layer_list=None, noise_type=None,**model_kwargs):
+                trg_layer_list=None,
+                **model_kwargs):
         for i, resnet in enumerate(self.resnets):
             attn = None if i == 0 else self.attentions[i - 1]
 
@@ -1140,7 +1140,6 @@ class CrossAttnUpBlock2D(nn.Module):
         encoder_hidden_states=None,
         upsample_size=None,
         trg_layer_list=None,
-        noise_type=None,
         **model_kwargs):
 
         j = 0
@@ -1175,7 +1174,6 @@ class CrossAttnUpBlock2D(nn.Module):
                 hidden_states = attn(hidden_states,
                                      encoder_hidden_states=encoder_hidden_states,
                                      trg_layer_list=trg_layer_list,
-                                     noise_type=noise_type,
                                      timestep=temb,
                                      **model_kwargs).sample
             j += 1

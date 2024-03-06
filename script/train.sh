@@ -1,5 +1,14 @@
 # !/bin/bash
 
+#pretrained_vae_anomal_data_with_pe
+#pretrained_vae_anomal_data_without_pe
+#pretrained_vae_anomal_nomal_data_with_pe
+#pretrained_vae_anomal_nomal_data_without_pe
+#scratch_vae_anomal_data_with_pe
+#scratch_vae_anomal_data_without_pe
+#scratch_vae_anomal_nomal_data_with_pe
+#scratch_vae_anomal_nomal_data_without_pe
+
 port_number=50001
 bench_mark="Tuft"
 obj_name='teeth_crop_onlyanomal'

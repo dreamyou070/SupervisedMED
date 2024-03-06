@@ -20,7 +20,8 @@ def register_attention_control(unet: nn.Module,controller: AttentionStore):
                     position_embedder=None):
 
             """ cross self rechecking necessary """
-            if argument.use_position_embedder  :
+            if argument.use_position_embedder :
+                print(f'position embedding using ...')
                 hidden_states = position_embedder(hidden_states, layer_name)
 
             query = self.to_q(hidden_states)
