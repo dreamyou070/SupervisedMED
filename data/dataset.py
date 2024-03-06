@@ -73,14 +73,16 @@ class TrainDataset(Dataset):
         image_paths, gt_paths = [], []
         folders = os.listdir(self.root_dir)
         for folder in folders :
+            repeat, cat = folder.split('_')
             folder_dir = os.path.join(self.root_dir, folder)
             rgb_folder = os.path.join(folder_dir, 'rgb')
             gt_folder = os.path.join(folder_dir, 'gt')
             images = os.listdir(rgb_folder)
             for image in images :
-                image_path = os.path.join(rgb_folder, image)
-                image_paths.append(image_path)
-                gt_paths.append(os.path.join(gt_folder, image))
+                for _ in range(repeat) :
+                    image_path = os.path.join(rgb_folder, image)
+                    image_paths.append(image_path)
+                    gt_paths.append(os.path.join(gt_folder, image))
 
         self.resize_shape=resize_shape
 
@@ -93,10 +95,8 @@ class TrainDataset(Dataset):
         self.latent_res = latent_res
 
     def __len__(self):
-        if len(self.anomaly_source_paths) > 0 :
-            return max(len(self.image_paths), len(self.anomaly_source_paths))
-        else:
-            return len(self.image_paths)
+
+        return len(self.image_paths)
 
     def torch_to_pil(self, torch_img):
         # torch_img = [3, H, W], from -1 to 1
