@@ -62,6 +62,7 @@ class AllPositionalEmbedding(nn.Module):
     def forward(self, x: torch.Tensor, layer_name):
         if layer_name in self.positional_encodings.keys() :
             position_embedder = self.positional_encodings[layer_name]
+            print(f'layer ({layer_name}) using positioner embedder')
             output = position_embedder(x)
             return output
         else :
