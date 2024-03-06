@@ -325,7 +325,7 @@ class ResnetBlock2D(nn.Module):
         if self.use_in_shortcut:
             self.conv_shortcut = torch.nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0)
 
-    def forward(self, input_tensor, temb, position_embedder):
+    def forward(self, input_tensor, temb):
 
         # [1] only hidden state
         hidden_states = input_tensor
@@ -386,8 +386,7 @@ class DownBlock2D(nn.Module):
     def set_use_sdpa(self, sdpa):
         pass
 
-    def forward(self, hidden_states, temb=None, position_embedder=None):
-        print(f'in DownBlock2D class ')
+    def forward(self, hidden_states, temb=None, **model_kwargs):
         output_states = ()
 
         for resnet in self.resnets:
