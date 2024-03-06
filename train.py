@@ -133,11 +133,16 @@ def main(args):
             with torch.no_grad():
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
                 anomal_position_vector = gt.squeeze().flatten()
+            """
             with torch.set_grad_enabled(True):
                 model_kwargs = {}
                 model_kwargs['position_embedder'] = position_embedder
                 unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
                      **model_kwargs)
+            """
+            with torch.set_grad_enabled(True):
+                unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
+                     noise_type=position_embedder)
             query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
             controller.reset()
             attn_list, query_list, key_list = [], [], []
@@ -147,29 +152,37 @@ def main(args):
                 key_list.append(key_dict[layer][0])  # head, pix_num, dim
                 # attn_list.append(attn_dict[layer][0])
             # [1] local
-            query = torch.cat(query_list, dim=-1)  # head, pix_num, long_dim
-            key = torch.cat(key_list, dim=-1).squeeze()  # head, 77, long_dim
+            local_query = torch.cat(query_list, dim=-1)  # head, pix_num, long_dim
+            local_key = torch.cat(key_list, dim=-1).squeeze()  # head, 77, long_dim
+            # local_query = [8, 64*64, 280] = [64*64, 2240]
             attention_scores = torch.baddbmm(
-                torch.empty(query.shape[0], query.shape[1], key.shape[1], dtype=query.dtype, device=query.device),
-                query, key.transpose(-1, -2), beta=0, )
+                torch.empty(local_query.shape[0], local_query.shape[1], local_key.shape[1], dtype=query.dtype,
+                            device=query.device),
+                local_query, local_key.transpose(-1, -2),
+                beta=0, )
             local_attn = attention_scores.softmax(dim=-1)[:, :, :2]
-            normal_activator.collect_attention_scores(local_attn, anomal_position_vector,
-                                                      1 - anomal_position_vector, True)
-            normal_activator.collect_anomal_map_loss(local_attn, anomal_position_vector, )
+            normal_activator.collect_attention_scores(local_attn,
+                                                      anomal_position_vector,
+                                                      # normal_position_vector,
+                                                      1 - anomal_position_vector,
+                                                      True)
+            normal_activator.collect_anomal_map_loss(local_attn,
+                                                     anomal_position_vector, )
 
             # [5] backprop
-            normal_cls_loss, normal_trigger_loss, anomal_cls_loss, anomal_trigger_loss = normal_activator.generate_attention_loss()
-            if type(anomal_cls_loss) == float:
-                attn_loss = args.normal_weight * normal_trigger_loss.mean()
-            else:
-                attn_loss = args.normal_weight * normal_cls_loss.mean() + args.anomal_weight * anomal_cls_loss.mean()
-            if args.do_cls_train:
-                if type(anomal_trigger_loss) == float:
-                    attn_loss = args.normal_weight * normal_cls_loss.mean()
+            if args.do_attn_loss:
+                normal_cls_loss, normal_trigger_loss, anomal_cls_loss, anomal_trigger_loss = normal_activator.generate_attention_loss()
+                if type(anomal_cls_loss) == float:
+                    attn_loss = args.normal_weight * normal_trigger_loss.mean()
                 else:
-                    attn_loss += args.normal_weight * normal_cls_loss.mean() + args.anomal_weight * anomal_cls_loss.mean()
-            loss += attn_loss
-            loss_dict['attn_loss'] = attn_loss.item()
+                    attn_loss = args.normal_weight * normal_cls_loss.mean() + args.anomal_weight * anomal_cls_loss.mean()
+                if args.do_cls_train:
+                    if type(anomal_trigger_loss) == float:
+                        attn_loss = args.normal_weight * normal_cls_loss.mean()
+                    else:
+                        attn_loss += args.normal_weight * normal_cls_loss.mean() + args.anomal_weight * anomal_cls_loss.mean()
+                loss += attn_loss
+                loss_dict['attn_loss'] = attn_loss.item()
 
             if args.do_map_loss:
                 map_loss = normal_activator.generate_anomal_map_loss()
