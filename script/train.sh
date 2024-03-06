@@ -12,7 +12,7 @@ obj_name='teeth_crop_onlyanormal'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="pretrained_vae_anomal_data_with_pe_second_try"
+file_name="pretrained_vae_anomal_data_with_pe_second_try_repeat_25"
 #  --use_position_embedder
 # --vae_model_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
 

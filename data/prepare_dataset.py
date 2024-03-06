@@ -14,10 +14,10 @@ def call_dataset(args) :
         tokenizer = load_tokenizer(args)
 
     dataset = TrainDataset(root_dir=root_dir,
-                         resize_shape=[512, 512],
-                         tokenizer=tokenizer,
-                         caption=args.trigger_word,
-                         latent_res=args.latent_res,)
+                             resize_shape=[512, 512],
+                             tokenizer=tokenizer,
+                             caption=args.trigger_word,
+                             latent_res=args.latent_res,)
 
     dataloader = torch.utils.data.DataLoader(dataset,
                                              batch_size=args.batch_size,
