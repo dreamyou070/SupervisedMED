@@ -17,7 +17,7 @@ layer_name='layer_3'
 sub_folder="up_16_32_64"
 file_name="pretrained_vae_anomal_data_with_pe"
 
-accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
+accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder \
