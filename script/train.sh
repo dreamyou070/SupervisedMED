@@ -16,7 +16,7 @@ file_name="pretrained_vae_anomal_data_without_pe"
 #  --use_position_embedder
 # --vae_model_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
 
-accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
+accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder \
