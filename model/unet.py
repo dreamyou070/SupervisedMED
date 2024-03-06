@@ -325,7 +325,7 @@ class ResnetBlock2D(nn.Module):
         if self.use_in_shortcut:
             self.conv_shortcut = torch.nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0)
 
-    def forward(self, input_tensor, temb):
+    def forward(self, input_tensor, temb, **model_kwargs):
 
         # [1] only hidden state
         hidden_states = input_tensor
