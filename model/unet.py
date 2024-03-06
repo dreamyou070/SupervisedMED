@@ -386,7 +386,8 @@ class DownBlock2D(nn.Module):
     def set_use_sdpa(self, sdpa):
         pass
 
-    def forward(self, hidden_states, temb=None):
+    def forward(self, hidden_states, temb=None, position_embedder=None):
+        print(f'in DownBlock2D class ')
         output_states = ()
 
         for resnet in self.resnets:
