@@ -58,10 +58,12 @@ def inference(latent,
     # [1] text
     input_ids, attention_mask = get_input_ids(tokenizer, args.prompt)
     encoder_hidden_states = text_encoder(input_ids.to(text_encoder.device))["last_hidden_state"]
-    model_kwargs = {}
-    model_kwargs['position_embedder'] = position_embedder
+    #model_kwargs = {}
+    #model_kwargs['position_embedder'] = position_embedder
+
+    #if args.use_position_embedder
     unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
-         **model_kwargs)
+         noise_type=position_embedder)
     query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
     controller.reset()
     query_list, key_list = [], []
