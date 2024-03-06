@@ -17,6 +17,7 @@ from data.prepare_dataset import call_dataset
 from model import call_model_package
 from attention_store.normal_activator import passing_normalize_argument
 from torch import nn
+from safetensors.torch import load_file
 
 
 def main(args):
@@ -46,6 +47,9 @@ def main(args):
     print(f'\n step 4. model ')
     weight_dtype, save_dtype = prepare_dtype(args)
     text_encoder, vae, unet, network, position_embedder = call_model_package(args, weight_dtype, accelerator)
+    if args.vae_model_dir is not None :
+        vae.load_state_dict(load_file(args.vae_model_dir))
+        vae.to(accelerator.device, dtype=weight_dtype)
 
     print(f'\n step 5. optimizer')
     args.max_train_steps = len(train_dataloader) * args.max_train_epochs
@@ -300,6 +304,7 @@ if __name__ == "__main__":
     parser.add_argument("--use_position_embedder", action='store_true')
     parser.add_argument("--on_desktop", action='store_true')
     parser.add_argument("--position_embedder_weights", type=str, default=None)
+    parser.add_argument("--vae_model_dir", type=str, default=None)
     args = parser.parse_args()
     unet_passing_argument(args)
     passing_argument(args)
