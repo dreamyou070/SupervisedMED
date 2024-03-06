@@ -295,7 +295,6 @@ if __name__ == "__main__":
     parser.add_argument("--trg_layer_list", type=arg_as_list, default=[])
     parser.add_argument("--do_map_loss", action='store_true')
     parser.add_argument("--use_focal_loss", action='store_true')
-    parser.add_argument("--test_noise_predicting_task_loss", action='store_true')
     parser.add_argument("--all_positional_embedder", action='store_true')
     parser.add_argument("--use_position_embedder", action='store_true')
     parser.add_argument("--position_embedder_weights", type=str, default=None)
