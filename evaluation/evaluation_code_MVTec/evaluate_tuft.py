@@ -142,8 +142,8 @@ def calculate_au_pro_au_roc(gt_filenames,
     print("Read ground truth files and corresponding predictions..")
 
     for (gt_name, pred_name) in tqdm(zip(gt_filenames, prediction_filenames), total=len(gt_filenames)):
-        ground_truth.append(np.asarray(Image.open(gt_name)))
-        predictions.append(tiff.imread(pred_name))
+        ground_truth.append(np.asarray(Image.open(gt_name).resize((512,512))))
+        predictions.append(tiff.imread(pred_name).resize(512,512))
 
     # Derive binary labels for each input image:
     # (0 = anomaly free, 1 = anomalous).
@@ -211,11 +211,9 @@ def main():
                                                                          anomaly_maps_dir=args.anomaly_maps_dir)
 
                 # [2] Calculate the PRO and ROC curves.
-                au_pro, au_roc, pro_curve, roc_curve = \
-                    calculate_au_pro_au_roc(
-                        gt_filenames,
-                        prediction_filenames,
-                        args.pro_integration_limit)
+                au_pro, au_roc, pro_curve, roc_curve = calculate_au_pro_au_roc(gt_filenames,
+                                                                               prediction_filenames,
+                                                                               args.pro_integration_limit)
 
                 evaluation_dict[obj]['au_pro'] = au_pro
                 evaluation_dict[obj]['au_roc'] = au_roc
