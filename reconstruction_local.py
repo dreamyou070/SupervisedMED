@@ -54,15 +54,12 @@ scheduler = DDIMScheduler(num_train_timesteps=1000,
 
 def inference(latent,
               tokenizer, text_encoder, unet, controller, normal_activator, position_embedder,
-              args, org_h, org_w, thred, global_conv_net):
+              args, org_h, org_w, thred):
     # [1] text
     input_ids, attention_mask = get_input_ids(tokenizer, args.prompt)
     encoder_hidden_states = text_encoder(input_ids.to(text_encoder.device))["last_hidden_state"]
     # [2] unet
-    if args.use_position_embedder and args.use_global_conv:
-        unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
-             noise_type=[position_embedder, global_conv_net])
-    elif args.use_position_embedder and not args.use_global_conv:
+    if args.use_position_embedder :
         unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
              noise_type=position_embedder,)
     else:
@@ -249,7 +246,7 @@ def main(args):
                                                                                      position_embedder,
                                                                                      args,
                                                                                      trg_h, trg_w,
-                                                                                     thred, global_conv_net)
+                                                                                     thred)
                             cls_map_pil.save(os.path.join(save_base_folder, f'{name}_cls.png'))
                             normal_map_pil.save(os.path.join(save_base_folder, f'{name}_normal.png'))
                             anomaly_map_pil.save( os.path.join(save_base_folder, f'{name}_anomal.png'))
