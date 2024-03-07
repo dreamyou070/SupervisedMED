@@ -341,5 +341,4 @@ if __name__ == "__main__":
     unet_passing_argument(args)
     passing_argument(args)
     passing_normalize_argument(args)
-    passing_mvtec_argument(args)
     main(args)
