@@ -86,9 +86,11 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
 
     # Test images are located here.
     test_dir = path.join(dataset_base_dir, object_name, 'test')
+    print(f'test_dir = {test_dir}')
 
     # List all ground truth and corresponding anomaly images.
     for subdir in listdir(str(test_dir)):
+        print(f'subdir = {subdir}')
         # Ground truth images are located here.
         gt_dir = path.join(test_dir, subdir, 'gt')
 
@@ -211,10 +213,7 @@ def main():
                 gt_filenames, prediction_filenames = parse_dataset_files(object_name=obj,
                                                                          dataset_base_dir=args.dataset_base_dir,
                                                                          anomaly_maps_dir=args.anomaly_maps_dir)
-                print(f'args.dataset_base_dir = {args.dataset_base_dir}')
-                print(f'args.anomaly_maps_dir = {args.anomaly_maps_dir}')
-                print(f'gt_filenames = {gt_filenames}')
-                print(f'prediction_filenames = {prediction_filenames}')
+
 
 
                 # Calculate the PRO and ROC curves.
