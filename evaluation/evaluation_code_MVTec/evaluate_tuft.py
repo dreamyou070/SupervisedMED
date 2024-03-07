@@ -143,6 +143,9 @@ def calculate_au_pro_au_roc(gt_filenames,
 
     for (gt_name, pred_name) in tqdm(zip(gt_filenames, prediction_filenames), total=len(gt_filenames)):
         ground_truth.append(np.asarray(Image.open(gt_name).resize((512,512))))
+        pred_img = tiff.imread(pred_name)
+        print(f'type of pred_img : {type(pred_img)}')
+        
         predictions.append(tiff.imread(pred_name).resize(512,512))
 
     # Derive binary labels for each input image:
