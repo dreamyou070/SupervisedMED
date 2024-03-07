@@ -86,11 +86,9 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
 
     # Test images are located here.
     test_dir = path.join(dataset_base_dir, object_name, 'test')
-    print(f'test_dir = {test_dir}')
 
     # List all ground truth and corresponding anomaly images.
     for subdir in listdir(str(test_dir)):
-        print(f'subdir = {subdir}')
         # Ground truth images are located here.
         gt_dir = path.join(test_dir, subdir, 'gt')
 
@@ -99,7 +97,7 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
             [path.join(gt_dir, file)
              for file
              in listdir(gt_dir)
-             if path.splitext(file)[1] == '.png'])
+             if path.splitext(file)[1] == '.JPG'])
 
         # Get the corresponding filenames of the anomaly images.
         prediction_filenames.extend(
@@ -142,10 +140,8 @@ def calculate_au_pro_au_roc(gt_filenames,
     predictions = []
 
     print("Read ground truth files and corresponding predictions..")
-    print(f'len(gt_filenames) = {len(gt_filenames)}')
 
     for (gt_name, pred_name) in tqdm(zip(gt_filenames, prediction_filenames), total=len(gt_filenames)):
-        print(f'pred_name = {pred_name}')
         ground_truth.append(np.asarray(Image.open(gt_name)))
         predictions.append(tiff.imread(pred_name))
 
