@@ -7,7 +7,7 @@ sub_folder="up_16_32_64"
 file_name="1_pretrained_vae_anomal_data_with_pe"
 
 dataset_dir="../../../MyData/anomaly_detection/${bench_mark}"
-base_dir="../../result/${bench_mark}/${obj_name}/${layer_name}/${sub_folder}/${file_name}/reconstruction_with_test_data"
+base_dir="../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}/reconstruction_with_test_data"
 
 output_dir="metrics"
 
