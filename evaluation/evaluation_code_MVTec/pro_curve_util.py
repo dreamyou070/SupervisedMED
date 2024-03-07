@@ -46,21 +46,20 @@ def compute_pro(anomaly_maps, ground_truth_maps):
     pro_changes = np.zeros(shape, dtype=np.float64)
 
     for gt_ind, gt_map in enumerate(ground_truth_maps):
-
-        # Compute the connected components in the ground truth map.
+        # ---------------------------------------------------------------------
+        # Compute the connected components in the ground truth map. (gt shape)
         labeled, n_components = label(gt_map, structure)
         num_gt_regions += n_components
-
         # Compute the mask that gives us all ok pixels.
         ok_mask = labeled == 0
         num_ok_pixels_in_map = np.sum(ok_mask)
         num_ok_pixels += num_ok_pixels_in_map
-
         # Compute by how much the FPR changes when each anomaly score is
         # added to the set of positives.
         # fp_change needs to be normalized later when we know the final value
         # of num_ok_pixels -> right now it is only the change in the number of
-        # false positives
+        # ---------------------------------------------------------------------
+        # false positives (gt shape)
         fp_change = np.zeros_like(gt_map, dtype=fp_changes.dtype)
         fp_change[ok_mask] = 1
 
@@ -68,12 +67,13 @@ def compute_pro(anomaly_maps, ground_truth_maps):
         # added to the set of positives.
         # pro_change needs to be normalized later when we know the final value
         # of num_gt_regions.
+        print(f'fp_change = {fp_change.shape}')
         pro_change = np.zeros_like(gt_map, dtype=np.float64)
         for k in range(n_components):
             region_mask = labeled == (k + 1)
             region_size = np.sum(region_mask)
             pro_change[region_mask] = 1. / region_size
-
+        print(f'pro_change = {pro_change.shape}')
         fp_changes[gt_ind, :, :] = fp_change
         pro_changes[gt_ind, :, :] = pro_change
 
