@@ -2,11 +2,11 @@
 
 port_number=50003
 bench_mark="Tuft"
-obj_name='teeth_crop'
+obj_name='teeth_crop_onlyanormal'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="3_pretrained_vae_anomal_normal_data_with_pe"
+file_name="5_scratch_vae_anomal_data_with_pe"
 
 # position_embedding_layer="down_blocks_0_attentions_0_transformer_blocks_0_attn1"
 # --d_dim 320 --use_position_embedder --position_embedding_layer ${position_embedding_layer} \
@@ -24,4 +24,5 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
+ --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
  --threds [0.5] --use_position_embedder

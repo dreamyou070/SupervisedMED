@@ -120,15 +120,17 @@ def main(args):
     tokenizer = load_tokenizer(args)
     text_encoder, vae, unet, _ = load_target_model(args, weight_dtype,
                                                    accelerator)
+    if args.vae_pretrained_dir is not None :
+        from safetensors.torch import load_file
+        vae.load_state_dict(load_file(args.vae_pretrained_dir))
+        vae.to(accelerator.device, dtype=weight_dtype)
+
+
 
     position_embedder = None
     if args.use_position_embedder:
         position_embedder = AllPositionalEmbedding()
 
-    global_conv_net = None
-    if args.use_global_conv :
-        from model.overlapping_conv import AllGCN
-        global_conv_net = AllGCN()
 
 
     print(f'\n step 2. accelerator and device')
@@ -167,10 +169,7 @@ def main(args):
             position_embedder.load_state_dict(position_embedder_state_dict)
             position_embedder.to(accelerator.device, dtype=weight_dtype)
 
-        if args.use_global_conv:
-            global_net_pretrained_dir = os.path.join(os.path.join(parent, f'global_convolution_network'), f'global_convolution_net_{lora_epoch}.safetensors')
-            global_conv_net.load_state_dict(load_file(global_net_pretrained_dir))
-            global_conv_net.to(accelerator.device, dtype=weight_dtype)
+
 
         # [2] load network
         anomal_detecting_state_dict = load_file(network_model_dir)
@@ -368,6 +367,7 @@ if __name__ == '__main__':
     parser.add_argument("--all_self_cross_positional_embedder", action='store_true')
     parser.add_argument("--use_global_conv", action='store_true')
     parser.add_argument("--do_train_check", action='store_true')
+    parser.add_argument("--vae_pretrained_dir", type=str)
     args = parser.parse_args()
     passing_argument(args)
     unet_passing_argument(args)
