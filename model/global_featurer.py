@@ -70,8 +70,9 @@ class AllConv2d(nn.Module):
                                                                  #stride = 1)
 
     def forward(self, x: torch.Tensor, layer_name):
+        device = x.device
         if layer_name in self.layer_names_res_dim.keys() :
-            global_featurer = self.global_featuring[layer_name]
+            global_featurer = self.global_featuring[layer_name].to(device)
             global_feature = global_featurer(x)
             return global_feature
         else :
