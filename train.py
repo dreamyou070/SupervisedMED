@@ -50,12 +50,19 @@ def main(args):
         vae.load_state_dict(load_file(args.vae_pretrained_dir))
         vae.to(accelerator.device, dtype=weight_dtype)
 
+    global_network = None
+    if args.use_global_network :
+        from model.global_featurer import AllConv2d
+        global_network = AllConv2d()
+
     print(f'\n step 5. optimizer')
     args.max_train_steps = len(train_dataloader) * args.max_train_epochs
     trainable_params = network.prepare_optimizer_params(args.text_encoder_lr,
                                                         args.unet_lr, args.learning_rate)
     if args.use_position_embedder:
         trainable_params.append({"params": position_embedder.parameters(), "lr": args.learning_rate})
+    if args.use_global_network :
+        trainable_params.append({"params": global_network.parameters(), "lr": args.learning_rate})
     optimizer_name, optimizer_args, optimizer = get_optimizer(args, trainable_params)
 
     print(f'\n step 6. lr')
@@ -67,14 +74,15 @@ def main(args):
     normal_activator = NormalActivator(loss_focal, loss_l2, args.use_focal_loss)
 
     print(f'\n step 8. model to device')
-    if args.use_position_embedder :
+    if args.use_position_embedder and args.use_global_network :
+        global_network, unet, text_encoder, network, optimizer, train_dataloader, lr_scheduler, position_embedder = accelerator.prepare(
+            global_network, unet, text_encoder, network, optimizer, train_dataloader, lr_scheduler, position_embedder)
+    elif args.use_position_embedder and not args.use_global_network :
         unet, text_encoder, network, optimizer, train_dataloader, lr_scheduler, position_embedder = accelerator.prepare(
             unet, text_encoder, network, optimizer, train_dataloader, lr_scheduler, position_embedder)
     else:
         unet, text_encoder, network, optimizer, train_dataloader, lr_scheduler = accelerator.prepare(unet, text_encoder,
-                                                                                                     network, optimizer,
-                                                                                                     train_dataloader,
-                                                                                                     lr_scheduler)
+                                                                    network, optimizer, train_dataloader,  lr_scheduler)
     text_encoders = transform_models_if_DDP([text_encoder])
     unet, network = transform_models_if_DDP([unet, network])
     if args.use_position_embedder:
@@ -139,8 +147,9 @@ def main(args):
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
                 anomal_position_vector = gt.squeeze().flatten()
             with torch.set_grad_enabled(True):
+
                 unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
-                     noise_type=position_embedder)
+                     noise_type=[position_embedder, global_network] )
             query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
             controller.reset()
             attn_list, origin_query_list, query_list, key_list = [], [], [], []
@@ -227,7 +236,11 @@ def main(args):
                 p_save_dir = os.path.join(position_embedder_base_save_dir,
                                           f'position_embedder_{epoch + 1}.safetensors')
                 pe_model_save(accelerator.unwrap_model(position_embedder), save_dtype, p_save_dir)
-
+            if global_network is not None:
+                global_network_base_save_dir = os.path.join(args.output_dir, 'global_network')
+                os.makedirs(global_network_base_save_dir, exist_ok=True)
+                pe_model_save(accelerator.unwrap_model(global_network),
+                              save_dtype, os.path.join(global_network_base_save_dir, f'global_network_{epoch + 1}.safetensors'))
     accelerator.end_training()
 
 if __name__ == "__main__":

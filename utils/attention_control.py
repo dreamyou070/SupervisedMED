@@ -16,13 +16,23 @@ def passing_argument(args):
 def register_attention_control(unet: nn.Module,controller: AttentionStore):
 
     def ca_forward(self, layer_name):
-        def forward(hidden_states, context=None, trg_layer_list=None, noise_type=None,**model_kwargs):
+        def forward(hidden_states, context=None, trg_layer_list=None, noise_type=None, **model_kwargs):
             is_cross_attention = False
             if context is not None:
                 is_cross_attention = True
             """ cross self rechecking necessary """
-            if argument.use_position_embedder and noise_type is not None :
-                hidden_states = noise_type(hidden_states, layer_name)
+
+            if noise_type is not None :
+                position_embedder, global_net = noise_type
+                if argument.use_position_embedder and not argument.use_global_network :
+                    hidden_states = position_embedder(hidden_states, layer_name)
+
+                if argument.use_position_embedder and argument.use_global_network :
+                    position_embedder, global_net = noise_type
+                    lcoal_hidden_states = position_embedder(hidden_states, layer_name)
+                    global_hidden_states = global_net(hidden_states, layer_name)
+                    hidden_states = lcoal_hidden_states + global_hidden_states
+
             query = self.to_q(hidden_states)
             context = context if context is not None else hidden_states
             key = self.to_k(context)
