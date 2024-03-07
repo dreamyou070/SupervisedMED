@@ -129,6 +129,11 @@ def main(args):
                 encoder_hidden_states = text_encoder(batch["input_ids"].to(device))["last_hidden_state"]
             image = batch['image'].to(dtype=weight_dtype) # 1,3, 512,512
             gt = batch['gt'].to(dtype=weight_dtype) # 1, 64,64
+
+            if batch['is_ok'] == 1:
+                image = batch['augment_img'].to(dtype=weight_dtype)
+                gt = batch['augment_mask'].to(dtype=weight_dtype)
+
             with torch.no_grad():
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
                 anomal_position_vector = gt.squeeze().flatten()

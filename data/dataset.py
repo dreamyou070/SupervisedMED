@@ -6,6 +6,14 @@ import glob
 from PIL import Image
 from torchvision import transforms
 import cv2
+from data.perlin import rand_perlin_2d_np
+
+anomal_p = 0.03
+
+def passing_mvtec_argument(args):
+    global argument
+
+    argument = args
 
 class TestDataset(Dataset):
 
@@ -66,7 +74,8 @@ class TrainDataset(Dataset):
                  resize_shape=None,
                  tokenizer=None,
                  caption : str = None,
-                 latent_res : int = 64,) :
+                 latent_res : int = 64,
+                 anomaly_source_path=None) :
 
         # [1] base image
         self.root_dir = root_dir
@@ -103,6 +112,52 @@ class TrainDataset(Dataset):
         np_img = np.array(((torch_img + 1) / 2) * 255).astype(np.uint8).transpose(1, 2, 0)
         pil = Image.fromarray(np_img)
 
+    def augment_image(self, image, anomaly_source_img,
+                      min_perlin_scale, max_perlin_scale,
+                      min_beta_scale, max_beta_scale,
+                      object_position, trg_beta):
+
+        # [2] perlin noise
+        while True :
+
+            while True :
+                # [1] size of noise :big perlin scale means smaller noise
+                perlin_scalex = 2 ** (torch.randint(min_perlin_scale, max_perlin_scale, (1,)).numpy()[0])
+                perlin_scaley = 2 ** (torch.randint(min_perlin_scale, max_perlin_scale, (1,)).numpy()[0])
+                perlin_noise = rand_perlin_2d_np((self.resize_shape[0], self.resize_shape[1]), (perlin_scalex, perlin_scaley))
+                threshold = 0.3
+                perlin_thr = np.where(perlin_noise > threshold, np.ones_like(perlin_noise), np.zeros_like(perlin_noise))
+                # smoothing
+                perlin_thr = cv2.GaussianBlur(perlin_thr, (3,3), 0)
+                # only on object
+                total_object_pixel = int(self.resize_shape[0] * self.resize_shape[1])
+                if object_position is not None:
+                    total_object_pixel = np.sum(object_position)
+                    perlin_thr = perlin_thr * object_position
+                binary_2D_mask = (np.where(perlin_thr == 0, 0, 1)).astype(np.float32)  # [512,512,3]
+                if np.sum(binary_2D_mask) > anomal_p * total_object_pixel :
+                    break
+            blur_3D_mask = np.expand_dims(perlin_thr, axis=2)  # [512,512,3]
+
+            if trg_beta is None :
+                while True :
+                    # [1] how transparent the noise
+                    beta = torch.rand(1).numpy()[0]
+                    if max_beta_scale > beta > min_beta_scale :
+                        break
+            else:
+                beta = trg_beta
+
+            # big beta = transparent
+            A = beta * image + (1 - beta) * anomaly_source_img.astype(np.float32) # merged
+            augmented_image = (image * (1 - blur_3D_mask) + A * blur_3D_mask).astype(np.float32)
+            anomal_img = np.array(Image.fromarray(augmented_image.astype(np.uint8)), np.uint8)
+            binary_2d_pil = Image.fromarray((binary_2D_mask * 255).astype(np.uint8)).convert('L').resize((64, 64))
+            anomal_mask_torch = torch.where((torch.tensor(np.array(binary_2d_pil)) / 255) > 0.5, 1, 0)
+            if anomal_mask_torch.sum() > 0:
+                break
+        return anomal_img, anomal_mask_torch
+
     def get_input_ids(self, caption):
         tokenizer_output = self.tokenizer(caption, padding="max_length", truncation=True,return_tensors="pt")
         input_ids = tokenizer_output.input_ids
@@ -135,12 +190,42 @@ class TrainDataset(Dataset):
         gt_torch = torch.tensor(gt_img) / 255
         gt_torch = torch.where(gt_torch>0, 1, 0).unsqueeze(0)
 
+        # [3] generate pseudo anomal
+        is_ok = 0
+        if gt_torch.sum() == 0 :
+            is_ok = 1
+            object_position = None
+            """ normal sample, make pseudo sample"""
+            # [1] make psudo sample
+            from PIL import ImageFilter, ImageEnhance
+            org_pil = Image.open(img_path).convert('L').resize((self.resize_shape[0], self.resize_shape[1]))
+            augmenters = ['blurring', 'brightness', 'contrast']
+            augmenter_idx = idx % len(augmenters)
+            if augmenter_idx == 0:
+                pseudo_pil = org_pil.filter(ImageFilter.GaussianBlur(5))
+            elif augmenter_idx == 1:
+                pseudo_pil = ImageEnhance.Brightness(org_pil).enhance(0.7)
+            else:
+                pseudo_pil = ImageEnhance.Contrast(org_pil).enhance(2)
+            # [2] mask
+            pseudo_np = np.array(pseudo_pil)
+            anomal_img, anomal_mask_torch = self.augment_image(self, img, pseudo_np,
+                                                              argument.min_perlin_scale, argument.max_perlin_scale,
+                                                              argument.min_beta_scale, argument.max_beta_scale,
+                                                              object_position,
+                                                              argument.trg_beta)
+
+
+
         if self.tokenizer is not None :
             input_ids, attention_mask = self.get_input_ids(self.caption) # input_ids = [77]
         else :
             input_ids = torch.tensor([0])
 
-
         return {'image': self.transform(img),               # [3,512,512]
                 "gt": gt_torch,                             # [1, 64, 64]
-                'input_ids': input_ids.squeeze(0),  }
+                'input_ids': input_ids.squeeze(0),
+                'is_ok' : is_ok,
+                'augment_img' : self.transform(anomal_img) ,
+                'augment_mask' : anomal_mask_torch
+                }

@@ -6,12 +6,12 @@ obj_name='teeth_crop_onlyanormal'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="5_scratch_vae_anomal_data_with_pe"
+file_name="only_anomal_pe_cropped_image"
 
 # position_embedding_layer="down_blocks_0_attentions_0_transformer_blocks_0_attn1"
 # --d_dim 320 --use_position_embedder --position_embedding_layer ${position_embedding_layer} \
 # --use_position_embedder
-# --vae_model_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors"
+# --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
 # --use_position_embedder
 
 accelerate launch --config_file ../../../gpu_config/gpu_0_config \
@@ -24,5 +24,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
- --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
  --threds [0.5] --use_position_embedder
