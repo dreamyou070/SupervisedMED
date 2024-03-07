@@ -205,7 +205,7 @@ class TrainDataset(Dataset):
             """ normal sample, make pseudo sample"""
             # [1] make psudo sample
             from PIL import ImageFilter, ImageEnhance
-            org_pil = Image.open(img_path).convert('L').resize((self.resize_shape[0], self.resize_shape[1]))
+            org_pil = Image.open(img_path).convert('RGB').resize((self.resize_shape[0], self.resize_shape[1]))
             augmenters = ['blurring', 'brightness', 'contrast']
             augmenter_idx = idx % len(augmenters)
             if augmenter_idx == 0:
@@ -216,9 +216,11 @@ class TrainDataset(Dataset):
                 pseudo_pil = ImageEnhance.Contrast(org_pil).enhance(2)
             # [2] mask
             pseudo_np = np.array(pseudo_pil)
-            anomal_img, anomal_mask_torch = self.augment_image(self, img, pseudo_np,
-                                                               argument.min_perlin_scale, argument.max_perlin_scale,
-                                                               argument.min_beta_scale, argument.max_beta_scale,
+            anomal_img, anomal_mask_torch = self.augment_image(img, pseudo_np,
+                                                               argument.min_perlin_scale,
+                                                               argument.max_perlin_scale,
+                                                               argument.min_beta_scale,
+                                                               argument.max_beta_scale,
                                                                object_position,
                                                                argument.trg_beta)
 
@@ -233,6 +235,6 @@ class TrainDataset(Dataset):
                 "gt": gt_torch,                             # [1, 64, 64]
                 'input_ids': input_ids.squeeze(0),
                 'is_ok' : is_ok,
-                'augment_img' : self.transform(anomal_img) ,
+                'augment_img' : self.transform(anomal_img),
                 'augment_mask' : anomal_mask_torch
                 }
