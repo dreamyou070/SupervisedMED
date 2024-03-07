@@ -16,7 +16,6 @@ from utils.utils_loss import FocalLoss
 from data.prepare_dataset import call_dataset
 from model import call_model_package
 from attention_store.normal_activator import passing_normalize_argument
-from data.dataset import passing_mvtec_argument
 from torch import nn
 
 
