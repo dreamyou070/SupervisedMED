@@ -1,9 +1,12 @@
 from model.lora import create_network
 from model.pe import AllPositionalEmbedding, SinglePositionalEmbedding
 from model.diffusion_model import load_target_model
+import os
+from safetensors.torch import load_file
 from model.unet import TimestepEmbedding
 
-def call_model_package(args, weight_dtype, accelerator):
+def call_model_package(args, weight_dtype, accelerator, is_local ):
+
 
     # [1] diffusion
     text_encoder, vae, unet, _ = load_target_model(args, weight_dtype, accelerator)
@@ -38,13 +41,12 @@ def call_model_package(args, weight_dtype, accelerator):
     network.to(weight_dtype)
 
     # [3] PE
-    position_embedder = None
-    if args.use_position_embedder:
-        position_embedder = AllPositionalEmbedding()
-        if args.position_embedder_weights is not None :
-            from safetensors.torch import load_file
-            position_embedder_state_dict = load_file(args.position_embedder_weights)
-            position_embedder.load_state_dict(position_embedder_state_dict)
-            position_embedder.to(dtype=weight_dtype)
+    position_embedder = AllPositionalEmbedding()
+    if args.position_embedder_weights is not None :
+        from safetensors.torch import load_file
+        position_embedder_state_dict = load_file(args.position_embedder_weights)
+        position_embedder.load_state_dict(position_embedder_state_dict)
+        position_embedder.to(dtype=weight_dtype)
+
 
     return text_encoder, vae, unet, network, position_embedder
