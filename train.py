@@ -273,6 +273,10 @@ if __name__ == "__main__":
     parser.add_argument("--network_args", type=str, default=None, nargs="*", )
     parser.add_argument("--dim_from_weights", action="store_true", )
     parser.add_argument("--use_multi_position_embedder", action="store_true", )
+    parser.add_argument("--min_perlin_scale", type=int, default=0)
+    parser.add_argument("--max_perlin_scale", type=int, default=3)
+    parser.add_argument("--min_beta_scale", type=float, default=0.5)
+    parser.add_argument("--max_beta_scale", type=float, default=0.8)
 
     # step 5. optimizer
     parser.add_argument("--optimizer_type", type=str, default="AdamW",
@@ -340,7 +344,7 @@ if __name__ == "__main__":
     parser.add_argument("--test_noise_predicting_task_loss", action='store_true')
     parser.add_argument("--dist_loss_with_max", action='store_true')
     # -----------------------------------------------------------------------------------------------------------------
-    parser.add_argument("--back_trg_beta", type=float)
+    parser.add_argument("--trg_beta", type=float)
     parser.add_argument("--on_desktop", action='store_true')
     parser.add_argument("--all_positional_embedder", action='store_true')
     parser.add_argument("--all_self_cross_positional_embedder", action='store_true')
@@ -353,4 +357,6 @@ if __name__ == "__main__":
     unet_passing_argument(args)
     passing_argument(args)
     passing_normalize_argument(args)
+    from data.dataset import passing_mvtec_argument
+    passing_mvtec_argument(args)
     main(args)

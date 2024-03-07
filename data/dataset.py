@@ -124,9 +124,11 @@ class TrainDataset(Dataset):
                 # [1] size of noise :big perlin scale means smaller noise
                 perlin_scalex = 2 ** (torch.randint(min_perlin_scale, max_perlin_scale, (1,)).numpy()[0])
                 perlin_scaley = 2 ** (torch.randint(min_perlin_scale, max_perlin_scale, (1,)).numpy()[0])
-                perlin_noise = rand_perlin_2d_np((self.resize_shape[0], self.resize_shape[1]), (perlin_scalex, perlin_scaley))
+                perlin_noise = rand_perlin_2d_np((self.resize_shape[0], self.resize_shape[1]),
+                                                 (perlin_scalex, perlin_scaley))
                 threshold = 0.3
-                perlin_thr = np.where(perlin_noise > threshold, np.ones_like(perlin_noise), np.zeros_like(perlin_noise))
+                perlin_thr = np.where(perlin_noise > threshold,
+                                      np.ones_like(perlin_noise), np.zeros_like(perlin_noise))
                 # smoothing
                 perlin_thr = cv2.GaussianBlur(perlin_thr, (3,3), 0)
                 # only on object
@@ -149,6 +151,7 @@ class TrainDataset(Dataset):
                 beta = trg_beta
 
             # big beta = transparent
+            # if beta = 0 :only anomal
             A = beta * image + (1 - beta) * anomaly_source_img.astype(np.float32) # merged
             augmented_image = (image * (1 - blur_3D_mask) + A * blur_3D_mask).astype(np.float32)
             anomal_img = np.array(Image.fromarray(augmented_image.astype(np.uint8)), np.uint8)
@@ -214,10 +217,10 @@ class TrainDataset(Dataset):
             # [2] mask
             pseudo_np = np.array(pseudo_pil)
             anomal_img, anomal_mask_torch = self.augment_image(self, img, pseudo_np,
-                                                              argument.min_perlin_scale, argument.max_perlin_scale,
-                                                              argument.min_beta_scale, argument.max_beta_scale,
-                                                              object_position,
-                                                              argument.trg_beta)
+                                                               argument.min_perlin_scale, argument.max_perlin_scale,
+                                                               argument.min_beta_scale, argument.max_beta_scale,
+                                                               object_position,
+                                                               argument.trg_beta)
 
 
 
