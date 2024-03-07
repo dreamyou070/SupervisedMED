@@ -145,7 +145,8 @@ def calculate_au_pro_au_roc(gt_filenames,
         ground_truth.append(np.asarray(Image.open(gt_name).resize((512,512))))
         pred_img = tiff.imread(pred_name)
         print(f'type of pred_img : {type(pred_img)}')
-        
+        pred_pil = Image.open(pred_name)
+        print(f'predict by pillow')
         predictions.append(tiff.imread(pred_name).resize(512,512))
 
     # Derive binary labels for each input image:
