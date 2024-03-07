@@ -121,7 +121,6 @@ def main(args):
     text_encoder, vae, unet, _ = load_target_model(args, weight_dtype,
                                                    accelerator)
     if args.vae_pretrained_dir is not None :
-        from safetensors.torch import load_file
         vae.load_state_dict(load_file(args.vae_pretrained_dir))
         vae.to(accelerator.device, dtype=weight_dtype)
 
