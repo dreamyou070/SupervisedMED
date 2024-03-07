@@ -6,7 +6,7 @@ obj_name='teeth_crop_onlyanormal'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="10_pretrained_vae_anomal_with_pe_global_net"
+file_name="11_pretrained_vae_anomal_with_pe_global_net_local_hidden_states_globalize"
 
 anomal_source_path="../../../MyData/anomal_source"
 
@@ -24,4 +24,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
  --min_perlin_scale 2 --max_perlin_scale 6 \
- --trg_beta 0.0 --use_global_network
+ --trg_beta 0.0 --use_global_network --local_hidden_states_globalize

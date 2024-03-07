@@ -31,6 +31,8 @@ def register_attention_control(unet: nn.Module,controller: AttentionStore):
                     position_embedder, global_net = noise_type
                     lcoal_hidden_states = position_embedder(hidden_states, layer_name)
                     global_hidden_states = global_net(hidden_states, layer_name)
+                    if argument.local_hidden_states_globalize :
+                        global_hidden_states = global_net(lcoal_hidden_states, layer_name)
                     hidden_states = lcoal_hidden_states + global_hidden_states
 
             query = self.to_q(hidden_states)
