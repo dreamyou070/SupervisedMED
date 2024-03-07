@@ -34,7 +34,7 @@ def compute_pro(anomaly_maps, ground_truth_maps):
     num_gt_regions = 0
 
     print(f'anomaly_maps : {type(anomaly_maps)}')
-    print(f'anomaly_maps : {anomaly_maps.shape}')
+    print(f'anomaly_maps : {len(anomaly_maps)}')
 
     shape = (len(anomaly_maps),
              anomaly_maps[0].shape[0],
