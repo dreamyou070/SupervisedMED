@@ -5,7 +5,7 @@ import os
 from safetensors.torch import load_file
 from model.unet import TimestepEmbedding
 
-def call_model_package(args, weight_dtype, accelerator, is_local ):
+def call_model_package(args, weight_dtype, accelerator):
 
 
     # [1] diffusion
@@ -47,6 +47,5 @@ def call_model_package(args, weight_dtype, accelerator, is_local ):
         position_embedder_state_dict = load_file(args.position_embedder_weights)
         position_embedder.load_state_dict(position_embedder_state_dict)
         position_embedder.to(dtype=weight_dtype)
-
 
     return text_encoder, vae, unet, network, position_embedder

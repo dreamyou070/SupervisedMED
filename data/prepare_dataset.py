@@ -12,18 +12,13 @@ def call_dataset(args) :
     if not args.on_desktop :
         from model.tokenizer import load_tokenizer
         tokenizer = load_tokenizer(args)
+    print(f'root_dir = {root_dir}')
 
     dataset = TrainDataset(root_dir=root_dir,
-                         anomaly_source_path=args.anomal_source_path,
-                         resize_shape=[512, 512],
-                         tokenizer=tokenizer,
-                         caption=args.trigger_word,
-                         use_perlin=True,
-                         anomal_only_on_object=args.anomal_only_on_object,
-                         anomal_training=True,
-                         latent_res=args.latent_res,
-                         do_anomal_sample=args.do_anomal_sample,
-                         use_object_mask=args.do_object_detection, )
+                           resize_shape=[512, 512],
+                           tokenizer=tokenizer,
+                           caption=args.trigger_word,
+                           latent_res=args.latent_res,)
 
     dataloader = torch.utils.data.DataLoader(dataset,
                                              batch_size=args.batch_size,

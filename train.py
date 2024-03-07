@@ -45,7 +45,7 @@ def main(args):
 
     print(f'\n step 4. model ')
     weight_dtype, save_dtype = prepare_dtype(args)
-    text_encoder, vae, unet, network, position_embedder = call_model_package(args, weight_dtype, accelerator, True)
+    text_encoder, vae, unet, network, position_embedder = call_model_package(args, weight_dtype, accelerator)
 
     print(f'\n step 5. optimizer')
     args.max_train_steps = len(train_dataloader) * args.max_train_epochs
@@ -331,24 +331,11 @@ if __name__ == "__main__":
     parser.add_argument("--test_noise_predicting_task_loss", action='store_true')
     parser.add_argument("--dist_loss_with_max", action='store_true')
     # -----------------------------------------------------------------------------------------------------------------
-    parser.add_argument("--anomal_min_perlin_scale", type=int, default=0)
-    parser.add_argument("--anomal_max_perlin_scale", type=int, default=3)
-    parser.add_argument("--anomal_min_beta_scale", type=float, default=0.5)
-    parser.add_argument("--anomal_max_beta_scale", type=float, default=0.8)
-    parser.add_argument("--back_min_perlin_scale", type=int, default=0)
-    parser.add_argument("--back_max_perlin_scale", type=int, default=3)
-    parser.add_argument("--back_min_beta_scale", type=float, default=0.6)
-    parser.add_argument("--back_max_beta_scale", type=float, default=0.9)
-    parser.add_argument("--do_rot_augment", action='store_true')
-    parser.add_argument("--anomal_trg_beta", type=float)
     parser.add_argument("--back_trg_beta", type=float)
     parser.add_argument("--on_desktop", action='store_true')
     parser.add_argument("--all_positional_embedder", action='store_true')
     parser.add_argument("--all_self_cross_positional_embedder", action='store_true')
-    parser.add_argument("--patch_positional_self_embedder", action='store_true')
     parser.add_argument("--use_position_embedder", action='store_true')
-    parser.add_argument("--use_global_conv", action='store_true')
-    parser.add_argument("--answer_test", action='store_true')
     parser.add_argument("--position_embedder_weights", type=str, default=None)
     # -----------------------------------------------------------------------------------------------------------------
     args = parser.parse_args()
