@@ -10,7 +10,7 @@ file_name="9_pretrained_vae_anomal_normal_data_with_pe_self_aug"
 
 anomal_source_path="../../../MyData/anomal_source"
 
-accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_6_config \
+accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 60 \
@@ -25,5 +25,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_6_config \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
  --do_self_aug \
  --min_perlin_scale 2 --max_perlin_scale 6 \
- --trg_beta 0.0 \
- --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors"
+ --trg_beta 0.0
