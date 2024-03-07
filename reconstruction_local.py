@@ -54,18 +54,16 @@ scheduler = DDIMScheduler(num_train_timesteps=1000,
 
 def inference(latent,
               tokenizer, text_encoder, unet, controller, normal_activator, position_embedder,
-              args, org_h, org_w, thred):
+              args, org_h, org_w, thred, global_network):
     # [1] text
     input_ids, attention_mask = get_input_ids(tokenizer, args.prompt)
     encoder_hidden_states = text_encoder(input_ids.to(text_encoder.device))["last_hidden_state"]
     # [2] unet
     if args.use_position_embedder :
         unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
-             noise_type=position_embedder,)
+             noise_type=[position_embedder,global_network])
     else:
         unet(latent, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list, )
-
-
 
     query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
     controller.reset()
@@ -121,12 +119,14 @@ def main(args):
         vae.load_state_dict(load_file(args.vae_pretrained_dir))
         vae.to(accelerator.device, dtype=weight_dtype)
 
-
-
     position_embedder = None
     if args.use_position_embedder:
         position_embedder = AllPositionalEmbedding()
 
+    global_network = None
+    if args.use_global_network :
+        from model.global_featurer import AllConv2d
+        global_network = AllConv2d()
 
 
     print(f'\n step 2. accelerator and device')
@@ -165,7 +165,10 @@ def main(args):
             position_embedder.load_state_dict(position_embedder_state_dict)
             position_embedder.to(accelerator.device, dtype=weight_dtype)
 
-
+        if args.use_global_network :
+            global_network_state_dict = load_file(os.path.join(pe_base_dir, f'global_network/global_network_{lora_epoch}.safetensors'))
+            global_network.load_state_dict(global_network_state_dict)
+            global_network.to(accelerator.device, dtype=weight_dtype)
 
         # [2] load network
         anomal_detecting_state_dict = load_file(network_model_dir)
@@ -246,7 +249,7 @@ def main(args):
                                                                                      position_embedder,
                                                                                      args,
                                                                                      trg_h, trg_w,
-                                                                                     thred)
+                                                                                     thred, global_network)
                             cls_map_pil.save(os.path.join(save_base_folder, f'{name}_cls.png'))
                             normal_map_pil.save(os.path.join(save_base_folder, f'{name}_normal.png'))
                             anomaly_map_pil.save( os.path.join(save_base_folder, f'{name}_anomal.png'))
@@ -364,6 +367,7 @@ if __name__ == '__main__':
     parser.add_argument("--use_global_conv", action='store_true')
     parser.add_argument("--do_train_check", action='store_true')
     parser.add_argument("--vae_pretrained_dir", type=str)
+    parser.add_argument("--use_global_network", action='store_true')
     args = parser.parse_args()
     passing_argument(args)
     unet_passing_argument(args)
