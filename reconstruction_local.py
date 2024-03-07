@@ -166,7 +166,7 @@ def main(args):
             position_embedder.to(accelerator.device, dtype=weight_dtype)
 
         if args.use_global_network :
-            global_network_state_dict = load_file(os.path.join(pe_base_dir, f'global_network/global_network_{lora_epoch}.safetensors'))
+            global_network_state_dict = load_file(os.path.join(parent, f'global_network/global_network_{lora_epoch}.safetensors'))
             global_network.load_state_dict(global_network_state_dict)
             global_network.to(accelerator.device, dtype=weight_dtype)
 
