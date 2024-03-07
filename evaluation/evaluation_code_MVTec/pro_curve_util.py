@@ -32,20 +32,27 @@ def compute_pro(anomaly_maps, ground_truth_maps):
 
     num_ok_pixels = 0
     num_gt_regions = 0
-
+    # total 769 maps
     print(f'anomaly_maps : {type(anomaly_maps)}')
     print(f'anomaly_maps : {len(anomaly_maps)}')
 
-    shape = (len(anomaly_maps),
-             anomaly_maps[0].shape[0],
-             anomaly_maps[0].shape[1])
-    fp_changes = np.zeros(shape, dtype=np.uint32)
-    assert shape[0] * shape[1] * shape[2] < np.iinfo(fp_changes.dtype).max, \
-        'Potential overflow when using np.cumsum(), consider using np.uint64.'
+    ### all different shape ...
+    #shape = (len(anomaly_maps), anomaly_maps[0].shape[0], anomaly_maps[0].shape[1])
 
-    pro_changes = np.zeros(shape, dtype=np.float64)
-
+    #fp_changes = np.zeros(shape, dtype=np.uint32)
+    #assert shape[0] * shape[1] * shape[2] < np.iinfo(fp_changes.dtype).max, \
+    #    'Potential overflow when using np.cumsum(), consider using np.uint64.'
+    #pro_changes = np.zeros(shape, dtype=np.float64)
     for gt_ind, gt_map in enumerate(ground_truth_maps):
+
+        shape = (len(anomaly_maps), gt_map.shape[0], gt_map.shape[1])
+
+        fp_changes = np.zeros(shape, dtype=np.uint32)
+        assert shape[0] * shape[1] * shape[2] < np.iinfo(fp_changes.dtype).max, \
+            'Potential overflow when using np.cumsum(), consider using np.uint64.'
+        pro_changes = np.zeros(shape, dtype=np.float64)
+
+
         # ---------------------------------------------------------------------
         # Compute the connected components in the ground truth map. (gt shape)
         labeled, n_components = label(gt_map, structure)

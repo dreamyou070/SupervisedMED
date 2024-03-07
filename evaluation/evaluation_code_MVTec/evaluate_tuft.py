@@ -210,9 +210,7 @@ def main():
                                                                          dataset_base_dir=args.dataset_base_dir,
                                                                          anomaly_maps_dir=args.anomaly_maps_dir)
 
-
-
-                # Calculate the PRO and ROC curves.
+                # [2] Calculate the PRO and ROC curves.
                 au_pro, au_roc, pro_curve, roc_curve = \
                     calculate_au_pro_au_roc(
                         gt_filenames,
