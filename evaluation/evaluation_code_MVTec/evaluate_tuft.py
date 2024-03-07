@@ -149,10 +149,8 @@ def calculate_au_pro_au_roc(gt_filenames,
     binary_labels = list(map(lambda x: int(np.any(x > 0)), ground_truth))
 
     # Compute the PRO curve.
-    pro_curve = compute_pro(
-        anomaly_maps=predictions,
-        ground_truth_maps=ground_truth
-    )
+    pro_curve = compute_pro(anomaly_maps=predictions,
+                            ground_truth_maps=ground_truth)
 
     # Compute the area under the PRO curve.
     au_pro = util.trapezoid(
