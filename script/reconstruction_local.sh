@@ -6,7 +6,7 @@ obj_name='teeth_crop_onlyanormal'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="9_pretrained_vae_anomal_normal_data_with_pe_self_aug"
+file_name="10_pretrained_vae_anomal_with_pe_global_net"
 
 # position_embedding_layer="down_blocks_0_attentions_0_transformer_blocks_0_attn1"
 # --d_dim 320 --use_position_embedder --position_embedding_layer ${position_embedding_layer} \
@@ -24,4 +24,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
- --threds [0.5] --use_position_embedder
+ --threds [0.5] --use_position_embedder --use_global_network
