@@ -123,8 +123,7 @@ def main(args):
 
     position_embedder = None
     if args.use_position_embedder:
-        if args.all_positional_embedder :
-            position_embedder = AllPositionalEmbedding()
+        position_embedder = AllPositionalEmbedding()
 
     global_conv_net = None
     if args.use_global_conv :
