@@ -192,6 +192,10 @@ class TrainDataset(Dataset):
 
         # [3] generate pseudo anomal
         is_ok = 0
+
+        anomal_img = img
+        anomal_mask_torch = gt_torch
+
         if gt_torch.sum() == 0 :
             is_ok = 1
             object_position = None
