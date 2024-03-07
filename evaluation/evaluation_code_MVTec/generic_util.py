@@ -10,10 +10,10 @@ import os
 import numpy as np
 import tifffile as tiff
 
-OBJECT_NAMES = ['bottle', 'cable', 'capsule', 'carpet', 'grid',
-                'hazelnut', 'leather', 'metal_nut', 'pill', 'screw',
+OBJECT_NAMES = ['bottle', 'cable', 'capsule', 'carpet', 'grid', 'hazelnut', 'leather', 'metal_nut', 'pill', 'screw',
                 'tile', 'toothbrush', 'transistor', 'wood', 'zipper']
 
+OBJECT_NAMES_TUFT = ['teeth_crop_onlyanormal', 'teeth_crop']
 
 def trapezoid(x, y, x_max=None):
     """
