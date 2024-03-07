@@ -211,6 +211,10 @@ def main():
                 gt_filenames, prediction_filenames = parse_dataset_files(object_name=obj,
                                                                          dataset_base_dir=args.dataset_base_dir,
                                                                          anomaly_maps_dir=args.anomaly_maps_dir)
+                print(f'args.dataset_base_dir = {args.dataset_base_dir}')
+                print(f'args.anomaly_maps_dir = {args.anomaly_maps_dir}')
+                print(f'gt_filenames = {gt_filenames}')
+                print(f'prediction_filenames = {prediction_filenames}')
 
 
                 # Calculate the PRO and ROC curves.
