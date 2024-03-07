@@ -32,26 +32,14 @@ def compute_pro(anomaly_maps, ground_truth_maps):
 
     num_ok_pixels = 0
     num_gt_regions = 0
-    # total 769 maps
-    print(f'anomaly_maps : {type(anomaly_maps)}')
-    print(f'anomaly_maps : {len(anomaly_maps)}')
-
+    # total 769 maps, list type of anomaly_maps
     ### all different shape ...
-    #shape = (len(anomaly_maps), anomaly_maps[0].shape[0], anomaly_maps[0].shape[1])
-
-    #fp_changes = np.zeros(shape, dtype=np.uint32)
-    #assert shape[0] * shape[1] * shape[2] < np.iinfo(fp_changes.dtype).max, \
-    #    'Potential overflow when using np.cumsum(), consider using np.uint64.'
-    #pro_changes = np.zeros(shape, dtype=np.float64)
+    shape = (len(anomaly_maps), anomaly_maps[0].shape[0], anomaly_maps[0].shape[1]) # [[512,512], ...]
+    fp_changes = np.zeros(shape, dtype=np.uint32)
+    assert shape[0] * shape[1] * shape[2] < np.iinfo(fp_changes.dtype).max, \
+        'Potential overflow when using np.cumsum(), consider using np.uint64.'
+    pro_changes = np.zeros(shape, dtype=np.float64)
     for gt_ind, gt_map in enumerate(ground_truth_maps):
-
-        shape = (len(anomaly_maps), gt_map.shape[0], gt_map.shape[1])
-
-        fp_changes = np.zeros(shape, dtype=np.uint32)
-        assert shape[0] * shape[1] * shape[2] < np.iinfo(fp_changes.dtype).max, \
-            'Potential overflow when using np.cumsum(), consider using np.uint64.'
-        pro_changes = np.zeros(shape, dtype=np.float64)
-
 
         # ---------------------------------------------------------------------
         # Compute the connected components in the ground truth map. (gt shape)
@@ -74,13 +62,11 @@ def compute_pro(anomaly_maps, ground_truth_maps):
         # added to the set of positives.
         # pro_change needs to be normalized later when we know the final value
         # of num_gt_regions.
-        print(f'fp_change = {fp_change.shape}')
         pro_change = np.zeros_like(gt_map, dtype=np.float64)
         for k in range(n_components):
             region_mask = labeled == (k + 1)
             region_size = np.sum(region_mask)
             pro_change[region_mask] = 1. / region_size
-        print(f'pro_change = {pro_change.shape}')
         fp_changes[gt_ind, :, :] = fp_change
         pro_changes[gt_ind, :, :] = pro_change
 
@@ -90,7 +76,11 @@ def compute_pro(anomaly_maps, ground_truth_maps):
     pro_changes_flat = pro_changes.ravel()
 
     # Sort all anomaly scores.
-    print(f"Sort {len(anomaly_scores_flat)} anomaly scores...")
+    print(f"Sort {len(anomaly_scores_flat)} anomaly scores...") # 769
+    # list, len = 769
+    print(f'type of anomaly_scores_flat = {type(anomaly_scores_flat)}')
+    print(f'len of anomaly_scores_flat = {len(anomaly_scores_flat)}')
+    print(f' first component = {anomaly_scores_flat[0]}')
     sort_idxs = np.argsort(anomaly_scores_flat).astype(np.uint32)[::-1]
 
     # Info: np.take(a, ind, out=a) followed by b=a instead of
