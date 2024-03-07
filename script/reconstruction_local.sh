@@ -1,12 +1,12 @@
 # !/bin/bash
 
-port_number=50001
+port_number=50003
 bench_mark="Tuft"
-obj_name='teeth_crop_onlyanormal'
+obj_name='teeth_crop'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="1_pretrained_vae_anomal_data_with_pe"
+file_name="3_pretrained_vae_anomal_normal_data_with_pe"
 
 # position_embedding_layer="down_blocks_0_attentions_0_transformer_blocks_0_attn1"
 # --d_dim 320 --use_position_embedder --position_embedding_layer ${position_embedding_layer} \
