@@ -130,9 +130,10 @@ def main(args):
             image = batch['image'].to(dtype=weight_dtype) # 1,3, 512,512
             gt = batch['gt'].to(dtype=weight_dtype) # 1, 64,64
 
-            if batch['is_ok'] == 1:
-                image = batch['augment_img'].to(dtype=weight_dtype)
-                gt = batch['augment_mask'].to(dtype=weight_dtype)
+            if args.do_self_aug :
+                if batch['is_ok'] == 1:
+                    image = batch['augment_img'].to(dtype=weight_dtype)
+                    gt = batch['augment_mask'].to(dtype=weight_dtype)
 
             with torch.no_grad():
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
@@ -346,6 +347,8 @@ if __name__ == "__main__":
     parser.add_argument("--use_position_embedder", action='store_true')
     parser.add_argument("--position_embedder_weights", type=str, default=None)
     parser.add_argument("--vae_pretrained_dir", type=str)
+    parser.add_argument("--do_self_aug", action='store_true')
+
     args = parser.parse_args()
     unet_passing_argument(args)
     passing_argument(args)
