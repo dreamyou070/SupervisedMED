@@ -206,9 +206,11 @@ class TrainDataset(Dataset):
         # [4]
         new_np = np.zeros_like(img)
         new_np[:, :, 0] = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
-        new_np[:, :, 1] = teeth_img
-        #new_np[:, :, 1] = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
-        #new_np[:, :, 2] = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1], type='L')  # np.array,
+        if argument.rgb_train :
+            new_np[:, :, 1] = teeth_img
+        else :
+            new_np[:, :, 1] = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
+            new_np[:, :, 2] = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1], type='L')  # np.array,
         rgb_pil = np.array(Image.fromarray(new_np.astype(np.uint8)).convert('RGB'))
 
         # [5] make pseudo anomal
@@ -244,9 +246,11 @@ class TrainDataset(Dataset):
                                                                argument.trg_beta)
             anomal_np = np.zeros_like(anomal_img)
             anomal_np[:, :, 0] = anomal_img[:,:,0]
-            anomal_np[:, :, 1] = teeth_img
-            #anomal_np[:, :, 1] = anomal_img[:,:,0]
-            #anomal_np[:, :, 2] = anomal_img[:, :, 0]
+            if argument.rgb_train:
+                anomal_np[:, :, 1] = teeth_img
+            else :
+                anomal_np[:, :, 1] = anomal_img[:,:,0]
+                anomal_np[:, :, 2] = anomal_img[:, :, 0]
             anomal_pil = np.array(Image.fromarray(anomal_np.astype(np.uint8)).convert('RGB'))
 
         if self.tokenizer is not None :

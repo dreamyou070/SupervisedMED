@@ -364,6 +364,8 @@ if __name__ == "__main__":
     parser.add_argument("--use_global_network", action='store_true')
     parser.add_argument("--local_hidden_states_globalize", action='store_true')
     parser.add_argument("--do_black_and_white_noise", action='store_true')
+    parser.add_argument("--rgb_train", action='store_true')
+
     args = parser.parse_args()
     unet_passing_argument(args)
     passing_argument(args)
