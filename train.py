@@ -208,18 +208,19 @@ def main(args):
             avr_loss = epoch_loss_total / len(loss_list)
             loss_dict['avr_loss'] = avr_loss
             loss_dict['sample'] = batch['is_ok'] # if 1 = normal sample, if 0 = anormal sample
-            accelerator.backward(loss)
-            optimizer.step()
-            lr_scheduler.step()
-            optimizer.zero_grad(set_to_none=True)
-            if accelerator.sync_gradients:
-                progress_bar.update(1)
-                global_step += 1
-            if is_main_process:
-                progress_bar.set_postfix(**loss_dict)
-            normal_activator.reset()
-            if global_step >= args.max_train_steps:
-                break
+            if batch['is_ok'] == 1 :
+                accelerator.backward(loss)
+                optimizer.step()
+                lr_scheduler.step()
+                optimizer.zero_grad(set_to_none=True)
+                if accelerator.sync_gradients:
+                    progress_bar.update(1)
+                    global_step += 1
+                if is_main_process:
+                    progress_bar.set_postfix(**loss_dict)
+                normal_activator.reset()
+                if global_step >= args.max_train_steps:
+                    break
         # ----------------------------------------------------------------------------------------------------------- #
         # [6] epoch final
         accelerator.wait_for_everyone()
