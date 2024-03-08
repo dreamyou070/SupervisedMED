@@ -6,11 +6,11 @@ obj_name='teeth_20240308'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="14_pretrained_vae_anomal_with_pe_rgb_img_pseudo_anomal"
+file_name="15_pretrained_vae_anomal_with_pe_rgb_img_unsupervised_anomal"
 
 anomal_source_path="../../../MyData/anomal_source"
 
-accelerate launch --config_file ../../../gpu_config/gpu_0_config \
+accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 60 \
