@@ -154,6 +154,7 @@ class TrainDataset(Dataset):
 
             # big beta = transparent
             # if beta = 0 :only anomal
+            # if beta = 1 -> image
             A = beta * image + (1 - beta) * anomaly_source_img.astype(np.float32) # merged
             augmented_image = (image * (1 - blur_3D_mask) + A * blur_3D_mask).astype(np.float32)
             anomal_img = np.array(Image.fromarray(augmented_image.astype(np.uint8)), np.uint8)
