@@ -157,6 +157,7 @@ class TrainDataset(Dataset):
             A = beta * image + (1 - beta) * anomaly_source_img.astype(np.float32) # merged
             augmented_image = (image * (1 - blur_3D_mask) + A * blur_3D_mask).astype(np.float32)
             anomal_img = np.array(Image.fromarray(augmented_image.astype(np.uint8)), np.uint8)
+
             binary_2d_pil = Image.fromarray((binary_2D_mask * 255).astype(np.uint8)).convert('L').resize((64, 64))
             anomal_mask_torch = torch.where((torch.tensor(np.array(binary_2d_pil)) / 255) > 0.5, 1, 0)
             if anomal_mask_torch.sum() > 0:
@@ -219,9 +220,9 @@ class TrainDataset(Dataset):
             augmenters = ['white', 'black']
             augmenter_idx = idx % len(augmenters)
             if augmenter_idx == 0:
-                pseudo_np = np.ones((self.resize_shape[0],self.resize_shape[1])) * 255
+                pseudo_np = np.ones((self.resize_shape[0],self.resize_shape[1],3)) * 255
             else:
-                pseudo_np = np.zeros((self.resize_shape[0], self.resize_shape[1]))
+                pseudo_np = np.zeros((self.resize_shape[0], self.resize_shape[1],3))
             # [2] mask
             anomal_img, anomal_mask_torch = self.augment_image(img, pseudo_np,
                                                                argument.min_perlin_scale,
