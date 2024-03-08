@@ -14,6 +14,7 @@ def call_dataset(args) :
         tokenizer = load_tokenizer(args)
     print(f'root_dir = {root_dir}')
     dataset = TrainDataset(root_dir=root_dir,
+                           anomaly_source_path=args.anomal_source_path,
                            resize_shape=[512, 512],
                            tokenizer=tokenizer,
                            caption=args.trigger_word,

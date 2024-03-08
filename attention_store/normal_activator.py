@@ -133,9 +133,10 @@ class NormalActivator(nn.Module):
             cls_score, trigger_score = attn_score.chunk(2, dim=-1)  # [head,pixel], [head,pixel]
             cls_score, trigger_score = cls_score.squeeze(), trigger_score.squeeze()  # [head,pixel], [head,pixel]
             cls_score, trigger_score = cls_score.mean(dim=0), trigger_score.mean(dim=0)  # pix_num
+            """ trigger score should be normal position """
             trg_trigger_score = 1 - anomal_position_vector
-            map_loss = self.loss_l2(trigger_score.float(), trg_trigger_score.float())
-
+            map_loss = self.loss_l2(trigger_score.float(),
+                                    trg_trigger_score.float())
         self.anomal_map_loss.append(map_loss)
 
     def collect_noise_prediction_loss(self, noise_pred, noise, anomal_position_vector):
