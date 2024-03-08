@@ -7,7 +7,6 @@ def call_dataset(args) :
 
     # [1] set root data
     root_dir = os.path.join(args.data_path, f'{args.obj_name}/train')
-    #root_dir = f'{args.data_path}/{args.obj_name}/train'
 
     tokenizer = None
     if not args.on_desktop :

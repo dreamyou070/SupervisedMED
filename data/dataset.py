@@ -74,33 +74,34 @@ class TrainDataset(Dataset):
                  resize_shape=None,
                  tokenizer=None,
                  caption : str = None,
-                 latent_res : int = 64,
-                 anomaly_source_path=None) :
+                 latent_res : int = 64) :
 
         # [1] base image
         self.root_dir = root_dir
-        image_paths, gt_paths = [], []
+        image_paths, gt_paths, object_masks = [], [],[]
         folders = os.listdir(self.root_dir)
         for folder in folders :
             repeat, cat = folder.split('_')
             folder_dir = os.path.join(self.root_dir, folder)
-            rgb_folder = os.path.join(folder_dir, 'rgb')
+            rgb_folder = os.path.join(folder_dir, 'xray')
             gt_folder = os.path.join(folder_dir, 'gt')
+            object_folder = os.path.join(folder_dir, 'teeth')
             images = os.listdir(rgb_folder)
             for image in images :
                 for _ in range(int(repeat)) :
                     image_path = os.path.join(rgb_folder, image)
                     image_paths.append(image_path)
                     gt_paths.append(os.path.join(gt_folder, image))
+                    object_masks.append(os.path.join(object_folder, image))
 
         self.resize_shape=resize_shape
-
         self.caption = caption
         self.tokenizer = tokenizer
         self.transform = transforms.Compose([transforms.ToTensor(),
                                              transforms.Normalize([0.5], [0.5]),])
         self.image_paths = image_paths
         self.gt_paths = gt_paths
+        self.object_masks = object_masks
         self.latent_res = latent_res
 
     def __len__(self):
