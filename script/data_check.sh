@@ -12,7 +12,7 @@ python ../data_check.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${obj_name}/data_check_20240308_0.4_1" \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 30 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
- --data_path "../anomaly_detection/${bench_mark}" \
+ --data_path "../../../MyData/anomaly_detection/${bench_mark}" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --min_perlin_scale 1 \
