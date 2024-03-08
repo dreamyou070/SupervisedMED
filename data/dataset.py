@@ -204,6 +204,7 @@ class TrainDataset(Dataset):
         # [4]
         new_np = np.zeros_like(img)
         new_np = np.expand_dims(new_np, axis=2)
+        new_np = np.repeat(new_np, 3, axis=2)
         new_np[:, :, 0] = img
         new_np[:, :, 1] = teeth_img
         rgb_pil = np.array(Image.fromarray(new_np.astype(np.uint8)).convert('RGB'))
