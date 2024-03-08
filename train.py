@@ -208,19 +208,18 @@ def main(args):
             avr_loss = epoch_loss_total / len(loss_list)
             loss_dict['avr_loss'] = avr_loss
             loss_dict['sample'] = batch['is_ok'] # if 1 = normal sample, if 0 = anormal sample
-            if batch['is_ok'] == 1 :
-                accelerator.backward(loss)
-                optimizer.step()
-                lr_scheduler.step()
-                optimizer.zero_grad(set_to_none=True)
-                if accelerator.sync_gradients:
-                    progress_bar.update(1)
-                    global_step += 1
-                if is_main_process:
-                    progress_bar.set_postfix(**loss_dict)
-                normal_activator.reset()
-                if global_step >= args.max_train_steps:
-                    break
+            accelerator.backward(loss)
+            optimizer.step()
+            lr_scheduler.step()
+            optimizer.zero_grad(set_to_none=True)
+            if accelerator.sync_gradients:
+                progress_bar.update(1)
+                global_step += 1
+            if is_main_process:
+                progress_bar.set_postfix(**loss_dict)
+            normal_activator.reset()
+            if global_step >= args.max_train_steps:
+                break
         # ----------------------------------------------------------------------------------------------------------- #
         # [6] epoch final
         accelerator.wait_for_everyone()
@@ -364,6 +363,7 @@ if __name__ == "__main__":
     parser.add_argument("--do_self_aug", action='store_true')
     parser.add_argument("--use_global_network", action='store_true')
     parser.add_argument("--local_hidden_states_globalize", action='store_true')
+    parser.add_argument("--do_black_and_white_noise", action='store_true')
     args = parser.parse_args()
     unet_passing_argument(args)
     passing_argument(args)

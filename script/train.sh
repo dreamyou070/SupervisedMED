@@ -1,12 +1,12 @@
 # !/bin/bash
 #
-port_number=50011
+port_number=50015
 bench_mark="Tuft"
 obj_name='teeth_20240308'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="15_pretrained_vae_anomal_with_pe_rgb_img_unsupervised_anomal"
+file_name="15_pretrained_vae_anomal_with_pe_rgb_img_perlin_noise"
 
 anomal_source_path="../../../MyData/anomal_source"
 

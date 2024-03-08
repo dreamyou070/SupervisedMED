@@ -218,12 +218,22 @@ class TrainDataset(Dataset):
         if gt_torch.sum() == 0 :
             is_ok = 1
             """ normal sample, make pseudo sample"""
-            augmenters = ['white', 'black']
-            augmenter_idx = idx % len(augmenters)
-            if augmenter_idx == 0:
-                pseudo_np = np.ones((self.resize_shape[0],self.resize_shape[1],3)) * 255
-            else:
-                pseudo_np = np.zeros((self.resize_shape[0], self.resize_shape[1],3))
+            if argument.do_black_and_white_noise :
+                augmenters = ['white', 'black']
+                augmenter_idx = idx % len(augmenters)
+                if augmenter_idx == 0:
+                    pseudo_np = np.ones((self.resize_shape[0],self.resize_shape[1],3)) * 255
+                else:
+                    pseudo_np = np.zeros((self.resize_shape[0], self.resize_shape[1],3))
+            else :
+                noise = abs(rand_perlin_2d_np(( self.resize_shape[0], self.resize_shape[1]), (32, 32)))
+                alpha = noise.min()
+                if noise.min() == 0 :
+                    alpha = .0001
+                noise = (noise + alpha)
+                noise = noise / noise.max()
+                pseudo_np = (noise * 255)
+                pseudo_np = np.expand_dims(pseudo_np, axis=2).repeat(3, axis=2)
             # [2] mask
             anomal_img, anomal_mask_torch = self.augment_image(img, pseudo_np,
                                                                argument.min_perlin_scale,
