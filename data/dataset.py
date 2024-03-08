@@ -200,11 +200,11 @@ class TrainDataset(Dataset):
         teeth_path = self.object_masks[img_idx]
         teeth_img = self.load_image(teeth_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
         teeth_np = np.array(teeth_img)/ 255
-        background_position = np.where(teeth_np>0.5, 0, 1)
+        background_position = np.where(teeth_np > 0.5, 0, 1)
 
         # [4]
         new_np = np.zeros_like(img)
-        new_np[:, :, 0] = img
+        new_np[:, :, 0] = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
         new_np[:, :, 1] = teeth_img
         rgb_pil = np.array(Image.fromarray(new_np.astype(np.uint8)).convert('RGB'))
 
