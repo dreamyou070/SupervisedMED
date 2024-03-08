@@ -188,7 +188,7 @@ class TrainDataset(Dataset):
         # [1] base
         img_idx = idx % len(self.image_paths)
         img_path = self.image_paths[img_idx]
-        img = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
+        img = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='RGB')  # np.array,
 
         # [2] gt dir
         gt_path = self.gt_paths[img_idx]
@@ -204,8 +204,6 @@ class TrainDataset(Dataset):
 
         # [4]
         new_np = np.zeros_like(img)
-        new_np = np.expand_dims(new_np, axis=2)
-        new_np = np.repeat(new_np, 3, axis=2)
         new_np[:, :, 0] = img
         new_np[:, :, 1] = teeth_img
         rgb_pil = np.array(Image.fromarray(new_np.astype(np.uint8)).convert('RGB'))
