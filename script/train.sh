@@ -1,6 +1,6 @@
 # !/bin/bash
 #
-port_number=50010
+port_number=50011
 bench_mark="Tuft"
 obj_name='teeth_20240308'
 trigger_word='teeth'
@@ -10,7 +10,7 @@ file_name="14_pretrained_vae_anomal_with_pe_rgb_img_pseudo_anomal"
 
 anomal_source_path="../../../MyData/anomal_source"
 
-accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
+accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 60 \

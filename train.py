@@ -140,6 +140,7 @@ def main(args):
 
             if args.do_self_aug :
                 if batch['is_ok'] == 1:
+                    """ normal sample """
                     image = batch['augment_img'].to(dtype=weight_dtype)
                     gt = batch['augment_mask'].to(dtype=weight_dtype)
 
@@ -147,7 +148,6 @@ def main(args):
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
                 anomal_position_vector = gt.squeeze().flatten()
             with torch.set_grad_enabled(True):
-
                 unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
                      noise_type=[position_embedder, global_network] )
             query_dict, key_dict, attn_dict = controller.query_dict, controller.key_dict, controller.attn_dict
@@ -162,20 +162,15 @@ def main(args):
             # [1] local
             local_query = torch.cat(query_list, dim=-1)  # head, pix_num, long_dim
             local_key = torch.cat(key_list, dim=-1).squeeze()  # head, 77, long_dim
+            # learnable weight ?
             # local_query = [8, 64*64, 280] = [64*64, 2240]
             attention_scores = torch.baddbmm(
                 torch.empty(local_query.shape[0], local_query.shape[1], local_key.shape[1], dtype=query.dtype,
-                            device=query.device),
-                local_query, local_key.transpose(-1, -2),
-                beta=0, )
+                            device=query.device), local_query, local_key.transpose(-1, -2), beta=0, )
             local_attn = attention_scores.softmax(dim=-1)[:, :, :2]
-            normal_activator.collect_attention_scores(local_attn,
-                                                      anomal_position_vector,
-                                                      # normal_position_vector,
-                                                      1 - anomal_position_vector,
-                                                      True)
-            normal_activator.collect_anomal_map_loss(local_attn,
-                                                     anomal_position_vector, )
+            normal_activator.collect_attention_scores(local_attn, anomal_position_vector, # anomal position
+                                                      1 - anomal_position_vector, True)
+            normal_activator.collect_anomal_map_loss(local_attn, anomal_position_vector, )
 
             # [5] backprop
             if args.do_attn_loss:
@@ -212,6 +207,7 @@ def main(args):
             epoch_loss_total += current_loss
             avr_loss = epoch_loss_total / len(loss_list)
             loss_dict['avr_loss'] = avr_loss
+            loss_dict['sample'] = batch['is_ok'] # if 1 = normal sample, if 0 = anormal sample
             accelerator.backward(loss)
             optimizer.step()
             lr_scheduler.step()
