@@ -2,11 +2,11 @@
 
 port_number=50003
 bench_mark="Tuft"
-obj_name='teeth_crop_onlyanormal'
+obj_name='clahe_test_anomal_only'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="11_pretrained_vae_anomal_with_pe_global_net_local_hidden_states_globalize"
+file_name="12_pretrained_vae_anomal_with_pe_clahe"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
@@ -22,4 +22,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
- --threds [0.5] --use_position_embedder --use_global_network --local_hidden_states_globalize
+ --threds [0.5] --use_position_embedder
