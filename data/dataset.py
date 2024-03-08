@@ -144,6 +144,7 @@ class TrainDataset(Dataset):
             if trg_beta is None :
                 while True :
                     # [1] how transparent the noise
+                    # small = really transparent
                     beta = torch.rand(1).numpy()[0]
                     if max_beta_scale > beta > min_beta_scale :
                         break
@@ -185,7 +186,7 @@ class TrainDataset(Dataset):
         # [1] base
         img_idx = idx % len(self.image_paths)
         img_path = self.image_paths[img_idx]
-        img = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1])  # np.array,
+        img = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
 
         # [2] gt dir
         gt_path = self.gt_paths[img_idx]
@@ -194,47 +195,52 @@ class TrainDataset(Dataset):
         gt_torch = torch.where(gt_torch>0, 1, 0).unsqueeze(0)
 
         # [3] generate pseudo anomal
+        teeth_path = self.object_masks[img_idx]
+        teeth_img = self.load_image(teeth_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
+        teeth_np = np.array(teeth_img)/ 255
+        background_position = np.where(teeth_np>0.5, 0, 1)
+
+        # [4]
+        new_np = np.zeros_like(img)
+        new_np = np.expand_dims(new_np, axis=2)
+        new_np[:, :, 0] = img
+        new_np[:, :, 1] = teeth_img
+        rgb_pil = np.array(Image.fromarray(new_np.astype(np.uint8)).convert('RGB'))
+
+        # [5] make pseudo anomal
         is_ok = 0
-
-        anomal_img = img
+        anomal_pil = rgb_pil
         anomal_mask_torch = gt_torch
-
         if gt_torch.sum() == 0 :
             is_ok = 1
-            object_position = None
             """ normal sample, make pseudo sample"""
-            # [1] make psudo sample
-            from PIL import ImageFilter, ImageEnhance
-            org_pil = Image.open(img_path).convert('RGB').resize((self.resize_shape[0], self.resize_shape[1]))
-            augmenters = ['blurring', 'brightness', 'contrast']
+            augmenters = ['white', 'black']
             augmenter_idx = idx % len(augmenters)
             if augmenter_idx == 0:
-                pseudo_pil = org_pil.filter(ImageFilter.GaussianBlur(5))
-            elif augmenter_idx == 1:
-                pseudo_pil = ImageEnhance.Brightness(org_pil).enhance(0.7)
+                pseudo_np = np.ones((self.resize_shape[0],self.resize_shape[1])) * 255
             else:
-                pseudo_pil = ImageEnhance.Contrast(org_pil).enhance(2)
+                pseudo_np = np.zeros((self.resize_shape[0], self.resize_shape[1]))
             # [2] mask
-            pseudo_np = np.array(pseudo_pil)
             anomal_img, anomal_mask_torch = self.augment_image(img, pseudo_np,
                                                                argument.min_perlin_scale,
                                                                argument.max_perlin_scale,
                                                                argument.min_beta_scale,
                                                                argument.max_beta_scale,
-                                                               object_position,
+                                                               background_position,
                                                                argument.trg_beta)
-
-
+            anomal_np = np.zeros_like(anomal_img)
+            anomal_np[:, :, 0] = anomal_img[:,:,0]
+            anomal_np[:, :, 1] = teeth_img
+            anomal_pil = np.array(Image.fromarray(anomal_np.astype(np.uint8)).convert('RGB'))
 
         if self.tokenizer is not None :
             input_ids, attention_mask = self.get_input_ids(self.caption) # input_ids = [77]
         else :
             input_ids = torch.tensor([0])
 
-        return {'image': self.transform(img),               # [3,512,512]
+        return {'image': self.transform(rgb_pil),               # [3,512,512]
                 "gt": gt_torch,                             # [1, 64, 64]
                 'input_ids': input_ids.squeeze(0),
                 'is_ok' : is_ok,
-                'augment_img' : self.transform(anomal_img),
-                'augment_mask' : anomal_mask_torch
-                }
+                'augment_img' : self.transform(anomal_pil),
+                'augment_mask' : anomal_mask_torch}

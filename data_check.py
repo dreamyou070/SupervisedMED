@@ -47,11 +47,9 @@ def main(args):
 
         # [1] org img
         img_pil = torch_to_pil(sample['image'].squeeze(0))
-        print(f'saving_base_dir = {saving_base_dir}')
         img_pil.save(os.path.join(saving_base_dir, f'{i}_org_img.png'))
-
         object_mask_pil = make_mask_pil(sample['gt'].squeeze())
-        object_mask_pil.save(os.path.join(saving_base_dir, f'{i}_org_mask.png'))
+        object_mask_pil.save(os.path.join(saving_base_dir, f'{i}_gt.png'))
 
         # [2] anomal img
         anomal_img_pil = torch_to_pil(sample['augment_img'].squeeze(0))
@@ -59,33 +57,6 @@ def main(args):
         anomal_mask_pil = make_mask_pil(sample['augment_mask'].squeeze())
         anomal_mask_pil.save(os.path.join(saving_base_dir, f'{i}_anomal_mask.png'))
 
-        # [3] bg anomal img
-        """
-
-        bg_anomal_img_pil = torch_to_pil(sample['bg_anomal_image'].squeeze(0))
-        bg_anomal_img_pil.save(os.path.join(saving_base_dir, f'{i}_bg_anomal_img.png'))
-        bg_anomal_mask_pil = make_mask_pil(sample['bg_anomal_mask'].squeeze())
-        bg_anomal_mask_pil.save(os.path.join(saving_base_dir, f'{i}_bg_anomal_mask.png'))
-
-
-        # [4]
-        rotate_anomal_img_pil = torch_to_pil(sample['rotate_image'].squeeze(0))
-        rotate_anomal_img_pil.save(os.path.join(saving_base_dir, f'{i}_rotate_anomal_img.png'))
-        rotate_anomal_mask_pil = make_mask_pil(sample['rotate_mask'].squeeze())
-        rotate_anomal_mask_pil.save(os.path.join(saving_base_dir, f'{i}_rotate_anomal_mask.png'))
-
-        # [5] empty
-        empty_anomal_img_pil = torch_to_pil(sample['empty_image'].squeeze(0))
-        empty_anomal_img_pil.save(os.path.join(saving_base_dir, f'{i}_empty_img.png'))
-        empty_anomal_mask_pil = make_mask_pil(sample['empty_mask'].squeeze())
-        empty_anomal_mask_pil.save(os.path.join(saving_base_dir, f'{i}_empty_mask.png'))
-
-        # [6] rot
-        random_rot_anomal_img_pil = torch_to_pil(sample['random_rot_image'].squeeze(0))
-        random_rot_anomal_img_pil.save(os.path.join(saving_base_dir, f'{i}_random_rot_img.png'))
-        random_rot_anomal_mask_pil = make_mask_pil(sample['random_rot_mask'].squeeze())
-        random_rot_anomal_mask_pil.save(os.path.join(saving_base_dir, f'{i}_random_rot_mask.png'))
-        """
 
 
 if __name__ == "__main__":
