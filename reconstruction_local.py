@@ -217,6 +217,8 @@ def main(args):
 
                 anomal_folder_dir = os.path.join(test_img_folder, anomal_folder)
                 rgb_folder = os.path.join(anomal_folder_dir, 'rgb')
+                if args.test_with_xray :
+                    rgb_folder = os.path.join(anomal_folder_dir, 'xray')
                 gt_folder = os.path.join(anomal_folder_dir, 'gt')
                 if args.object_crop:
                     object_mask_folder = os.path.join(anomal_folder_dir, 'object_mask')
@@ -369,6 +371,7 @@ if __name__ == '__main__':
     parser.add_argument("--vae_pretrained_dir", type=str)
     parser.add_argument("--use_global_network", action='store_true')
     parser.add_argument("--local_hidden_states_globalize", action='store_true')
+    parser.add_argument("--test_with_xray", action='store_true')
     args = parser.parse_args()
     passing_argument(args)
     unet_passing_argument(args)
