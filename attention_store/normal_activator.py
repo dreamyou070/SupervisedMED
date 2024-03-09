@@ -122,7 +122,7 @@ class NormalActivator(nn.Module):
             cls_score, trigger_score = cls_score.mean(dim=0), trigger_score.mean(dim=0)  # pix_num
             res = int(attn_score.shape[0] ** 0.5)
             focal_loss_in = torch.cat([cls_score.view(res, res).unsqueeze(0).unsqueeze(0),
-                                       trigger_score.view(res, res).unsqueeze(0).unsqueeze(0)], 1)
+                                       trigger_score.view(res, res).unsqueeze(0).generate_attention_loss(0)], 1)
 
             # [2] target
             focal_loss_trg = anomal_position_vector.view(res, res).unsqueeze(0).unsqueeze(0)
@@ -181,14 +181,14 @@ class NormalActivator(nn.Module):
 
     def generate_attention_loss(self):
 
-        normal_cls_loss = 0.0
-        normal_trigger_loss = 0.0
+        normal_cls_loss = torch.tensor(0.0, requires_grad=True)
+        normal_trigger_loss = torch.tensor(0.0, requires_grad=True)
         if len(self.attention_loss['normal_cls_loss']) != 0:
             normal_cls_loss = torch.stack(self.attention_loss['normal_cls_loss'], dim=0).mean(dim=0)
             normal_trigger_loss = torch.stack(self.attention_loss['normal_trigger_loss'], dim=0).mean(dim=0)
 
-        anomal_cls_loss = 0.0
-        anomal_trigger_loss = 0.0
+        anomal_cls_loss = torch.tensor(0.0, requires_grad=True)
+        anomal_trigger_loss = torch.tensor(0.0, requires_grad=True)
         if len(self.attention_loss['anomal_cls_loss']) != 0:
             anomal_cls_loss = torch.stack(self.attention_loss['anomal_cls_loss'], dim=0).mean(dim=0)
             anomal_trigger_loss = torch.stack(self.attention_loss['anomal_trigger_loss'], dim=0).mean(dim=0)
