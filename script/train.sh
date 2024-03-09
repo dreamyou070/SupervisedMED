@@ -16,7 +16,7 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 60 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${bench_mark}" \
- --anomal_source_path "../../../MyData/noise_source" \
+ --anomal_source_path "../../../MyData/anomal_source" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --do_map_loss \
