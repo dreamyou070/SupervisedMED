@@ -147,6 +147,8 @@ def main(args):
             with torch.no_grad():
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
                 anomal_position_vector = gt.squeeze().flatten()
+            anomal_pixel_num = anomal_position_vector.sum()
+            print(f'anomal_pixel_num = {anomal_pixel_num}')
             with torch.set_grad_enabled(True):
                 unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
                      noise_type=[position_embedder, global_network] )
