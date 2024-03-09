@@ -26,4 +26,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
- --trg_beta 0.0 --normal_activating_test
+ --trg_beta 0.0 --do_self_aug
