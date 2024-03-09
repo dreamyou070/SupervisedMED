@@ -6,7 +6,7 @@ obj_name='teeth_20240308'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="14_pretrained_vae_anomal_with_pe_xray_img_perlin_noise"
+file_name="17_pretrained_vae_pe_xray_img_rgb_anomal"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
@@ -22,4 +22,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
- --threds [0.5] --use_position_embedder --do_train_check
+ --threds [0.5] --use_position_embedder --test_with_xray

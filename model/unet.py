@@ -1024,14 +1024,8 @@ class UpBlock2D(nn.Module):
         for i in range(LAYERS_PER_BLOCK_UP):
             res_skip_channels = in_channels if (i == LAYERS_PER_BLOCK_UP - 1) else out_channels
             resnet_in_channels = prev_output_channel if i == 0 else out_channels
-
-            resnets.append(
-                ResnetBlock2D(
-                    in_channels=resnet_in_channels + res_skip_channels,
-                    out_channels=out_channels,
-                )
-            )
-
+            resnets.append(ResnetBlock2D(in_channels=resnet_in_channels + res_skip_channels, # concatenated channels
+                                         out_channels=out_channels,))
         self.resnets = nn.ModuleList(resnets)
 
         if add_upsample:
