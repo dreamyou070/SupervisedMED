@@ -1,6 +1,6 @@
 # !/bin/bash
 
-port_number=50017
+port_number=50016
 bench_mark="Tuft"
 obj_name='teeth_20240308'
 caption='teeth'
@@ -22,4 +22,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
- --threds [0.5] --use_position_embedder --do_train_check
+ --threds [0.5] --use_position_embedder
