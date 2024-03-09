@@ -148,7 +148,6 @@ def main(args):
                 latents = vae.encode(image).latent_dist.sample() * args.vae_scale_factor
                 anomal_position_vector = gt.squeeze().flatten()
             anomal_pixel_num = anomal_position_vector.sum()
-            print(f'anomal_pixel_num = {anomal_pixel_num}')
             with torch.set_grad_enabled(True):
                 unet(latents, 0, encoder_hidden_states, trg_layer_list=args.trg_layer_list,
                      noise_type=[position_embedder, global_network] )
@@ -181,7 +180,6 @@ def main(args):
             # [5] backprop
             if args.do_attn_loss:
                 normal_cls_loss, normal_trigger_loss, anomal_cls_loss, anomal_trigger_loss = normal_activator.generate_attention_loss()
-                print(f'anomal cls loss = {anomal_cls_loss} | anomal_trigger_loss = {anomal_trigger_loss}')
                 if type(anomal_cls_loss) == float:
                     attn_loss = args.normal_weight * normal_trigger_loss.mean()
                 else:
