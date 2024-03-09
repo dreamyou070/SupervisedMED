@@ -2,7 +2,7 @@
 
 port_number=50017
 bench_mark="Tuft"
-obj_name='teeth_20240308'
+obj_name='20240308_final'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
