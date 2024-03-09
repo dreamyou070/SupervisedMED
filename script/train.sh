@@ -1,12 +1,12 @@
 # !/bin/bash
 #
-port_number=50016
+port_number=50017
 bench_mark="Tuft"
 obj_name='teeth_20240308'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="16_pretrained_vae_anomal_with_pe_xay_img_perlin_noise"
+file_name="17_pretrained_vae_anomal_with_pe_xay_img_perlin_noise_normal_activating_test"
 
 anomal_source_path="../../../MyData/anomal_source"
 
@@ -26,4 +26,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
- --trg_beta 0.0
+ --trg_beta 0.0 --normal_activating_test

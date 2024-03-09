@@ -168,8 +168,12 @@ def main(args):
                 torch.empty(local_query.shape[0], local_query.shape[1], local_key.shape[1], dtype=query.dtype,
                             device=query.device), local_query, local_key.transpose(-1, -2), beta=0, )
             local_attn = attention_scores.softmax(dim=-1)[:, :, :2]
-            normal_activator.collect_attention_scores(local_attn, anomal_position_vector, # anomal position
-                                                      1 - anomal_position_vector, True)
+            if args.normal_activating_test :
+                normal_activator.collect_attention_scores(local_attn, anomal_position_vector,  # anomal position
+                                                          1 - anomal_position_vector, False)
+            else :
+                normal_activator.collect_attention_scores(local_attn, anomal_position_vector, # anomal position
+                                                          1 - anomal_position_vector, True)
             normal_activator.collect_anomal_map_loss(local_attn, anomal_position_vector, )
 
             # [5] backprop
@@ -365,6 +369,7 @@ if __name__ == "__main__":
     parser.add_argument("--local_hidden_states_globalize", action='store_true')
     parser.add_argument("--do_black_and_white_noise", action='store_true')
     parser.add_argument("--rgb_train", action='store_true')
+    parser.add_argument("--normal_activating_test", action='store_true')
 
     args = parser.parse_args()
     unet_passing_argument(args)
