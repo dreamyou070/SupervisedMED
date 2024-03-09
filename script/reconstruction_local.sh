@@ -1,6 +1,6 @@
 # !/bin/bash
 
-port_number=50017
+port_number=50019
 bench_mark="Tuft"
 obj_name='20240308_final'
 caption='teeth'
