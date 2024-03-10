@@ -1,12 +1,12 @@
 # !/bin/bash
 #
-port_number=50020
-bench_mark="Tuft"
-obj_name='20240308_final_only_anomal'
-trigger_word='teeth'
+port_number=50001
+bench_mark="chest"
+obj_name='chest'
+trigger_word='chest'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="20_pretrained_vae_pe_xray_anomal_only_anomal"
+file_name="1_pretrained_vae_pe_xray_anomal"
 # \
 #--do_self_aug
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
