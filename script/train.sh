@@ -1,13 +1,14 @@
 # !/bin/bash
 #
-port_number=50019
-bench_mark="Tuft"
-obj_name='20240308_final'
+port_number=50001
+bench_mark="brain"
+obj_name='brain'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="19_pretrained_vae_pe_xray_anomal_dtd"
-
+file_name="1_pretrained_vae_pe_xray_anomal"
+# \
+#--do_self_aug
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
@@ -25,5 +26,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
  --max_beta_scale 0.9 \
- --min_beta_scale 0.5 \
- --do_self_aug
+ --min_beta_scale 0.5
