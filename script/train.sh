@@ -3,7 +3,7 @@
 port_number=50003
 bench_mark="chest"
 obj_name='chest'
-trigger_word='brain'
+trigger_word='chest'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
 file_name="1_pretrained_vae_pe_xray_anomal"
