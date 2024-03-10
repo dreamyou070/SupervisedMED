@@ -3,10 +3,10 @@
 port_number=50001
 bench_mark="brain"
 obj_name='brain'
-trigger_word='teeth'
+trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="2_pretrained_vae_pe_xray_anomal"
+file_name="1_pretrained_vae_pe_xray_anomal"
 # \
 #--do_self_aug
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
