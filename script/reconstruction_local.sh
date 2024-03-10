@@ -1,12 +1,12 @@
 # !/bin/bash
 
-port_number=51919
+port_number=51818
 bench_mark="Tuft"
 obj_name='20240308_final'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="15_pretrained_vae_anomal_with_pe_rgb_img_perlin_noise"
+file_name="18_pretrained_vae_pe_xray_img_rgb_anomal"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
