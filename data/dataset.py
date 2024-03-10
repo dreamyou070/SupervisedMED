@@ -214,7 +214,7 @@ class TrainDataset(Dataset):
             teeth_np = np.array(teeth_img)/ 255
             background_position = np.where(teeth_np > 0.5, 0, 1)
         else :
-            background_position = np.ones(self.resize_shape[0], self.resize_shape[1])
+            background_position = np.ones((self.resize_shape[0], self.resize_shape[1]))
 
         # [4]
         new_np = np.zeros_like(img)
