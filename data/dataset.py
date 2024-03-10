@@ -86,14 +86,16 @@ class TrainDataset(Dataset):
             folder_dir = os.path.join(self.root_dir, folder)
             rgb_folder = os.path.join(folder_dir, 'xray')
             gt_folder = os.path.join(folder_dir, 'gt')
-            object_folder = os.path.join(folder_dir, 'teeth')
+            if argument.obj_name == 'teeth' :
+                object_folder = os.path.join(folder_dir, 'teeth')
             images = os.listdir(rgb_folder)
             for image in images :
                 for _ in range(int(repeat)) :
                     image_path = os.path.join(rgb_folder, image)
                     image_paths.append(image_path)
                     gt_paths.append(os.path.join(gt_folder, image))
-                    object_masks.append(os.path.join(object_folder, image))
+                    if argument.obj_name == 'teeth':
+                        object_masks.append(os.path.join(object_folder, image))
 
         self.resize_shape=resize_shape
         self.caption = caption
@@ -206,10 +208,13 @@ class TrainDataset(Dataset):
         gt_torch = torch.where(gt_torch>0, 1, 0).unsqueeze(0)
 
         # [3] generate pseudo anomal
-        teeth_path = self.object_masks[img_idx]
-        teeth_img = self.load_image(teeth_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
-        teeth_np = np.array(teeth_img)/ 255
-        background_position = np.where(teeth_np > 0.5, 0, 1)
+        if argument.obj_name == 'teeth':
+            teeth_path = self.object_masks[img_idx]
+            teeth_img = self.load_image(teeth_path, self.resize_shape[0], self.resize_shape[1],type='L')  # np.array,
+            teeth_np = np.array(teeth_img)/ 255
+            background_position = np.where(teeth_np > 0.5, 0, 1)
+        else :
+            background_position = np.ones(self.resize_shape[0], self.resize_shape[1])
 
         # [4]
         new_np = np.zeros_like(img)
