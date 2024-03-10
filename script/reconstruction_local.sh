@@ -1,12 +1,12 @@
 # !/bin/bash
 
-port_number=50001
+port_number=50002
 bench_mark="bain"
 obj_name='brain'
 caption='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="1_pretrained_vae_pe_xray_anomal"
+file_name="2_pretrained_vae_pe_xray_anomal_self_aug"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
