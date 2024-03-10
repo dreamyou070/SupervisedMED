@@ -1,12 +1,12 @@
 # !/bin/bash
 #
-port_number=50001
+port_number=50002
 bench_mark="brain"
 obj_name='brain'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="1_pretrained_vae_pe_xray_anomal"
+file_name="1_pretrained_vae_pe_xray_anomal_self_aug"
 # \
 #--do_self_aug
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
@@ -26,4 +26,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
  --max_beta_scale 0.9 \
- --min_beta_scale 0.5
+ --min_beta_scale 0.5 --do_self_aug
