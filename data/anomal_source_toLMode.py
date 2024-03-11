@@ -18,6 +18,7 @@ def main() :
             images = os.listdir(cat_dir)
             for img in images :
                 img_dir = os.path.join(cat_dir, img)
+                print(img_dir)
                 pil = Image.open(img_dir).convert('L')
                 pil.save(os.path.join(save_cat_dir, img))
 
