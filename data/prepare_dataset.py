@@ -1,5 +1,5 @@
 import os
-from data.dataset import TrainDataset
+from data.dataset import TrainDataset, TrainDataset_Unsupervised
 import torch
 
 
@@ -13,12 +13,16 @@ def call_dataset(args) :
         from model.tokenizer import load_tokenizer
         tokenizer = load_tokenizer(args)
     print(f'root_dir = {root_dir}')
-    dataset = TrainDataset(root_dir=root_dir,
-                           anomaly_source_path=args.anomal_source_path,
-                           resize_shape=[512, 512],
-                           tokenizer=tokenizer,
-                           caption=args.trigger_word,
-                           latent_res=args.latent_res,)
+    
+    dataset_class = TrainDataset
+    if args.unsupervised :
+        dataset_class = TrainDataset_Unsupervised
+    dataset = dataset_class(root_dir=root_dir,
+                            anomaly_source_path=args.anomal_source_path,
+                            resize_shape=[512, 512],
+                            tokenizer=tokenizer,
+                            caption=args.trigger_word,
+                            latent_res=args.latent_res,)
     dataloader = torch.utils.data.DataLoader(dataset,
                                              batch_size=args.batch_size,
                                              shuffle=True)
