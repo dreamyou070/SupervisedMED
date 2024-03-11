@@ -8,7 +8,6 @@ trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
 file_name="1_pretrained_vae_pe_xray"
-          "1_pretrained_vae_pe_xray_anomal"
 
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
