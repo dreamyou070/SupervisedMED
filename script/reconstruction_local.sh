@@ -6,7 +6,7 @@ obj_name='20240308_final'
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="20_pretrained_vae_pe_xray_anomal_only_anomal"
+file_name="21_pretrained_vae_pe_xray_anomal_dtd_l_mode_0.4_0.8_self_aug"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
