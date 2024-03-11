@@ -1,20 +1,20 @@
 # !/bin/bash
 #
-port_number=50003
-bench_mark="Tuft"
-obj_name='20240308_final'
+port_number=50011
+category="medical"
+obj_name="chest"
+benchmark="Pneumothorax_Segmentation_Challenge"
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="21_pretrained_vae_pe_xray_anomal_dtd_l_mode_0.4_0.8_self_aug"
-# \
-#
+file_name="1_pretrained_vae_pe_xray"
+
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${bench_mark}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 100 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
- --data_path "../../../MyData/anomaly_detection/${bench_mark}" \
+ --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
  --anomal_source_path "../../../MyData/anomal_source_l_mode" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
@@ -26,5 +26,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
  --max_beta_scale 0.8 \
- --min_beta_scale 0.4 \
- --do_self_aug
+ --min_beta_scale 0.4

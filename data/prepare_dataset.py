@@ -6,7 +6,7 @@ import torch
 def call_dataset(args) :
 
     # [1] set root data
-    root_dir = os.path.join(args.data_path, f'{args.obj_name}/train')
+    root_dir = os.path.join(args.data_path, f'train')
 
     tokenizer = None
     if not args.on_desktop :
