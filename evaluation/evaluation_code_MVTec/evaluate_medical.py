@@ -76,7 +76,7 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
         dataset_base_dir: Base directory of the MVTec 3D-AD dataset.
         anomaly_maps_dir: Base directory where anomaly maps are located.
     """
-    assert object_name in util.OBJECT_NAMES_TUFT
+    assert object_name in util.OBJECT_NAMES_MEDICAL
 
     # Store a list of all ground truth filenames.
     gt_filenames = []
