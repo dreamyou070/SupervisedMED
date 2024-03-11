@@ -1,12 +1,12 @@
 # !/bin/bash
 #
-port_number=50001
+port_number=50003
 bench_mark="Tuft"
 obj_name='20240308_final'
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="21_pretrained_vae_pe_xray_anomal_dtd_l_mode_self_aug"
+file_name="21_pretrained_vae_pe_xray_anomal_dtd_l_mode_0.4_0.8_self_aug"
 # \
 #
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
@@ -25,6 +25,6 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
- --max_beta_scale 0.9 \
- --min_beta_scale 0.5 \
+ --max_beta_scale 0.8 \
+ --min_beta_scale 0.4 \
  --do_self_aug
