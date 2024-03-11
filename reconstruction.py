@@ -124,10 +124,6 @@ def main(args):
         position_embedder = AllPositionalEmbedding()
 
     global_network = None
-    if args.use_global_network :
-        from model.global_featurer import AllConv2d
-        global_network = AllConv2d()
-
 
     print(f'\n step 2. accelerator and device')
     vae.requires_grad_(False)
@@ -164,11 +160,6 @@ def main(args):
             position_embedder_state_dict = load_file(pretrained_pe_dir)
             position_embedder.load_state_dict(position_embedder_state_dict)
             position_embedder.to(accelerator.device, dtype=weight_dtype)
-
-        if args.use_global_network :
-            global_network_state_dict = load_file(os.path.join(parent, f'global_network/global_network_{lora_epoch}.safetensors'))
-            global_network.load_state_dict(global_network_state_dict)
-            global_network.to(accelerator.device, dtype=weight_dtype)
 
         # [2] load network
         anomal_detecting_state_dict = load_file(network_model_dir)
@@ -237,7 +228,6 @@ def main(args):
                     if accelerator.is_main_process:
                         with torch.no_grad():
                             img = np.array(input_img.resize((512, 512))) # [512,512,3]
-                            #latent = image2latent(img, vae, weight_dtype)
                             image = torch.from_numpy(img).float() / 127.5 - 1
                             image = image.permute(2, 0, 1).unsqueeze(0).to(vae.device, weight_dtype) # [1,3,512,512]
                             with torch.no_grad():
@@ -264,55 +254,6 @@ def main(args):
                         Image.open(os.path.join(gt_folder, rgb_img)).resize((org_h, org_w)).save(gt_img_save_dir)
                     # [3] original save
                     Image.open(rgb_img_dir).convert('RGB').save(os.path.join(save_base_folder, rgb_img))
-            # ---------------------------------------------------------------------------------------------------------
-            # [2] train path
-            """
-            if not args.object_crop:
-                train_img_folder = os.path.join(parent, 'train')
-
-                save_base_folder = os.path.join(check_base_folder, f'train_good')
-                os.makedirs(save_base_folder, exist_ok=True)
-
-                normal_folder_dir = os.path.join(train_img_folder, 'good')
-                rgb_folder = os.path.join(normal_folder_dir, 'rgb')
-
-                if args.object_crop:
-                    object_mask_folder = os.path.join(anomal_folder_dir, 'object_mask')
-
-                rgb_imgs = os.listdir(rgb_folder)
-                for rgb_img in rgb_imgs:
-
-                    name, ext = os.path.splitext(rgb_img)
-                    rgb_img_dir = os.path.join(rgb_folder, rgb_img)
-                    pil_img = Image.open(rgb_img_dir).convert('RGB')
-                    org_h, org_w = pil_img.size
-
-                    # [1] read object mask
-                    if args.object_crop :
-                        object_mask_pil = Image.open(os.path.join(object_mask_folder, rgb_img)).convert('L')
-                        h_start, h_end, w_start, w_end = generate_object_point(object_mask_pil)
-                        input_img = pil_img.crop((w_start, h_start, w_end, h_end))
-                    else :
-                        input_img = pil_img
-                    trg_h, trg_w = input_img.size
-                    if accelerator.is_main_process:
-
-                        with torch.no_grad():
-                            img = np.array(input_img.resize((512, 512)))
-                            vae_latent = image2latent(img, vae, weight_dtype)
-                            cls_map_pil, normal_map_pil, anomaly_map_pil = inference(vae_latent,
-                                                                                     tokenizer, text_encoder, unet,
-                                                                                     controller, normal_activator,
-                                                                                     position_embedder,
-                                                                                     args,
-                                                                                     trg_h, trg_w,
-                                                                                     thred)
-                            cls_map_pil.save(os.path.join(save_base_folder, f'{name}_cls.png'))
-                            normal_map_pil.save(os.path.join(save_base_folder, f'{name}_normal.png'))
-                            anomaly_map_pil.save( os.path.join(save_base_folder, f'{name}_anomal.png'))
-                            anomaly_map_pil.save(os.path.join(answer_anomal_folder, f'{name}.tiff'))
-                        Image.open(rgb_img_dir).convert('RGB').save(os.path.join(save_base_folder, rgb_img))
-            """
         print(f'Model To Original')
         for k in raw_state_dict_orig.keys():
             raw_state_dict[k] = raw_state_dict_orig[k]
