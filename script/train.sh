@@ -1,13 +1,13 @@
 # !/bin/bash
 #
-port_number=50011
+port_number=50012
 category="medical"
 obj_name="chest"
 benchmark="Pneumothorax_Segmentation_Challenge"
 trigger_word='chest'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="1_supervised"
+file_name="2_semi_supervised_anomal_source_simplex"
 #--unsupervised
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
@@ -15,7 +15,7 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --train_unet --train_text_encoder --start_epoch 1 --max_train_epochs 100 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
- --anomal_source_path "../../../MyData/anomal_source_l_mode" \
+ --anomal_source_path "../../../MyData/noise_source" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --do_map_loss \
@@ -26,4 +26,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
  --max_beta_scale 0.3 \
- --min_beta_scale 0.1
+ --min_beta_scale 0.1 --do_self_aug
