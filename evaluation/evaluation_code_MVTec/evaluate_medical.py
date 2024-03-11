@@ -63,7 +63,7 @@ def parse_user_arguments():
 
     # Check that the objects to be evaluated are actually available.
     for obj in args.evaluated_objects:
-        assert obj in util.OBJECT_NAMES_TUFT
+        assert obj in util.OBJECT_NAMES_MEDICAL
 
     return args
 

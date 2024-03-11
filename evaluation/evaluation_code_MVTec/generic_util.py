@@ -13,7 +13,7 @@ import tifffile as tiff
 OBJECT_NAMES = ['bottle', 'cable', 'capsule', 'carpet', 'grid', 'hazelnut', 'leather', 'metal_nut', 'pill', 'screw',
                 'tile', 'toothbrush', 'transistor', 'wood', 'zipper']
 
-OBJECT_NAMES_TUFT = ['teeth_crop_onlyanormal', 'teeth_crop']
+OBJECT_NAMES_TUFT = ['teeth_crop_onlyanormal', 'teeth_crop','brain','chest']
 
 def trapezoid(x, y, x_max=None):
     """
