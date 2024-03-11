@@ -1,15 +1,15 @@
 # !/bin/bash
 #
-port_number=50015
+port_number=50016
 category="medical"
-obj_name="teeth"
-benchmark="teeth_inmouth"
+obj_name="chest"
+benchmark="Pneumothorax_Segmentation_Challenge_2"
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="22_supervised_in_mouth"
+file_name="2_supervised_normal_anormal_2_4"
 #--unsupervised
-accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
+accelerate launch --config_file ../../../gpu_config/gpu_0_1_config \
  --main_process_port $port_number ../train.py --log_with wandb \
  --output_dir "../../result/${category}/${obj_name}/${layer_name}/${sub_folder}/${file_name}" \
  --train_unet --train_text_encoder --start_epoch 1 --max_train_epochs 100 \
