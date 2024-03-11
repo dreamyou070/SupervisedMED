@@ -88,6 +88,7 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
     test_dir = path.join(dataset_base_dir, object_name, 'test')
 
     # List all ground truth and corresponding anomaly images.
+    print(f'test_dir = {test_dir}')
     for subdir in listdir(str(test_dir)):
         # Ground truth images are located here.
         gt_dir = path.join(test_dir, subdir, 'gt')
