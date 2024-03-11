@@ -1,13 +1,13 @@
 # !/bin/bash
 #
-port_number=50012
+port_number=50014
 category="medical"
-obj_name="chest"
-benchmark="Pneumothorax_Segmentation_Challenge"
-trigger_word='chest'
+obj_name="brain"
+benchmark="NFBS"
+trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="2_semi_supervised_anomal_source_simplex"
+file_name="4_unsupervised"
 #--unsupervised
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
@@ -26,4 +26,5 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
  --max_beta_scale 0.3 \
- --min_beta_scale 0.1 --do_self_aug
+ --min_beta_scale 0.1 \
+ --unsupervised
