@@ -45,7 +45,7 @@ def compute_pro(anomaly_maps, ground_truth_maps):
         # Compute the connected components in the ground truth map. (gt shape)
 
         print(f' Whe Calculate Label, ')
-        print(f'gt_map = {gt_map.shape}')
+        print(f'gt_map = {gt_map}')
         print(f'structure = {structure.shape}')
 
         labeled, n_components = label(gt_map, structure) # Here Problem
