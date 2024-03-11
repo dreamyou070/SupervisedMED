@@ -180,6 +180,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_perlin_scale", type=int, default=3)
     parser.add_argument("--trg_beta", type=float)
     parser.add_argument("--rgb_train", action = 'store_true')
+    parser.add_argument("--unsupervised", action='store_true')
     # -----------------------------------------------------------------------------------------------------------------
     args = parser.parse_args()
     unet_passing_argument(args)

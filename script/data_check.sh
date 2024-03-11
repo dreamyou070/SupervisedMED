@@ -20,4 +20,4 @@ python ../data_check.py --log_with wandb \
  --min_perlin_scale 1 \
  --max_perlin_scale 4 \
  --max_beta_scale 0.9 \
- --min_beta_scale 0.5
+ --min_beta_scale 0.5 --unsupervised
