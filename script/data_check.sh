@@ -13,7 +13,7 @@ python ../data_check.py --log_with wandb \
  --output_dir "../../result/${category}/${obj_name}/${layer_name}/${sub_folder}/${file_name}/data_check_20240309_0.5_0.9" \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 30 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
- --data_path "../../../MyData/anomaly_detection/${bench_mark}" \
+ --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
  --anomal_source_path "../../../MyData/anomal_source_l_mode" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
