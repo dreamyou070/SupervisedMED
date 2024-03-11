@@ -115,8 +115,11 @@ class TrainDataset(Dataset):
             self.anomaly_source_paths = []
 
     def __len__(self):
-
-        return len(self.image_paths)
+        
+        if len(self.anomaly_source_paths) != 0 :
+            return max(len(self.image_paths), len(self.anomaly_source_paths))
+        else :
+            return len(self.image_paths)
 
     def torch_to_pil(self, torch_img):
         # torch_img = [3, H, W], from -1 to 1
