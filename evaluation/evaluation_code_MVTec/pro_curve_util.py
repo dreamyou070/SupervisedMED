@@ -43,9 +43,10 @@ def compute_pro(anomaly_maps, ground_truth_maps):
 
         # ---------------------------------------------------------------------
         # Compute the connected components in the ground truth map. (gt shape)
+        if gt_map.ndim == 3 :
+            gt_map = gt_map[:,:,0].squeeze()
 
-        print(f' Whe Calculate Label, ')
-        print(f'gt_map = {gt_map}')
+        print(f'gt_map = {gt_map.shape}')
         print(f'structure = {structure.shape}')
 
         labeled, n_components = label(gt_map, structure) # Here Problem
