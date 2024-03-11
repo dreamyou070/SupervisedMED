@@ -405,7 +405,8 @@ class TrainDataset_Unsupervised(Dataset):
         xray, name = os.path.split(img_path)
         parent, _ = os.path.split(xray)
         object_path = os.path.join(parent, f'object_mask/{name}')
-        object_position = Image.open(object_path).convert('L').resize((self.resize_shape[0], self.resize_shape[1]))/255
+        object_position = Image.open(object_path).convert('L').resize((self.resize_shape[0], self.resize_shape[1]))
+        object_position = np.array(object_position) / 255
         object_position = np.where(object_position > 0.5, 1, 0)
 
 
