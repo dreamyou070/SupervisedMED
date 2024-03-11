@@ -88,12 +88,10 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
     test_dir = path.join(dataset_base_dir, object_name, 'test')
 
     # List all ground truth and corresponding anomaly images.
-    print(f'test_dir = {test_dir}')
     for subdir in listdir(str(test_dir)):
-        print(f'subdir = {subdir}')
         # Ground truth images are located here.
         gt_dir = path.join(test_dir, subdir, 'gt')
-        print(f'gt_dir = {gt_dir}')
+
         # Add the gt files to the list of all gt filenames.
         extends= ['.JPG', '.jpg','.png']
         gt_filenames.extend( [path.join(gt_dir, file) for file in listdir(gt_dir) if path.splitext(file)[1] in extends])
@@ -104,7 +102,6 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
              for file in listdir(gt_dir)])
 
     print(f"Parsed {len(gt_filenames)} ground truth image files.")
-
     return gt_filenames, prediction_filenames
 
 
@@ -141,7 +138,6 @@ def calculate_au_pro_au_roc(gt_filenames,
 
     for (gt_name, pred_name) in tqdm(zip(gt_filenames, prediction_filenames), total=len(gt_filenames)):
         ground_truth.append(np.asarray(Image.open(gt_name).resize((512,512))))
-        #pred_img = tiff.imread(pred_name)
         predictions.append(np.asarray(Image.open(pred_name).resize((512, 512))))
 
     # Derive binary labels for each input image:
@@ -149,6 +145,7 @@ def calculate_au_pro_au_roc(gt_filenames,
     binary_labels = list(map(lambda x: int(np.any(x > 0)), ground_truth))
 
     # Compute the PRO curve.
+    print(f'compute pro curve ! ')
     pro_curve = compute_pro(anomaly_maps=predictions,
                             ground_truth_maps=ground_truth)
 
@@ -210,6 +207,11 @@ def main():
                                                                          anomaly_maps_dir=args.anomaly_maps_dir)
 
                 # [2] Calculate the PRO and ROC curves.
+
+
+
+
+
                 au_pro, au_roc, pro_curve, roc_curve = calculate_au_pro_au_roc(gt_filenames,
                                                                                prediction_filenames,
                                                                                args.pro_integration_limit)
