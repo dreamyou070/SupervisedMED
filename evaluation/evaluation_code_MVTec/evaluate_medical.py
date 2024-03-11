@@ -55,7 +55,7 @@ def parse_user_arguments():
                         nargs='+',
                         help="""List of objects to be evaluated. By default,
                                 all dataset objects will be evaluated.""",
-                        default=util.OBJECT_NAMES_TUFT)
+                        default=util.OBJECT_NAMES_MEDICAL)
     parser.add_argument('--base_dir', type=str)
     args = parser.parse_args()
     # Check that the PRO integration limit is within the valid range.
