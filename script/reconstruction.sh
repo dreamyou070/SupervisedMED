@@ -2,12 +2,12 @@
 
 port_number=50002
 category="medical"
-obj_name="chest"
-benchmark="Pneumothorax_Segmentation_Challenge"
-caption='chest'
+obj_name="teeth"
+benchmark="teeth_inmouth"
+caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="3_pretrained_vae_pe_xray_anomal_source_l_mode_self_aug"
+file_name="22_supervised_in_mouth"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
