@@ -450,7 +450,7 @@ class TrainDataset_Unsupervised(Dataset):
             input_ids = torch.tensor([0])
 
         return {'image': self.transform(rgb_pil),  # [3,512,512]
-                "gt": gt_torch,  # [1, 64, 64]
+                "gt": anomal_mask_torch,  # [1, 64, 64]
                 'input_ids': input_ids.squeeze(0),
                 'is_ok': is_ok,
                 'augment_img': self.transform(anomal_pil),
