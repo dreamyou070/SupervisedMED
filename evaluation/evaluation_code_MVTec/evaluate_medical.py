@@ -90,9 +90,10 @@ def parse_dataset_files(object_name, dataset_base_dir, anomaly_maps_dir):
     # List all ground truth and corresponding anomaly images.
     print(f'test_dir = {test_dir}')
     for subdir in listdir(str(test_dir)):
+        print(f'subdir = {subdir}')
         # Ground truth images are located here.
         gt_dir = path.join(test_dir, subdir, 'gt')
-
+        print(f'gt_dir = {gt_dir}')
         # Add the gt files to the list of all gt filenames.
         gt_filenames.extend(
             [path.join(gt_dir, file)
