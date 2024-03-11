@@ -3,7 +3,7 @@
 port_number=50015
 category="medical"
 obj_name="teeth"
-benchmark="Tuft"
+benchmark="teeth_inmouth"
 trigger_word='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
