@@ -21,7 +21,6 @@ def call_dataset(args) :
     if args.trigger_word == 'brain' and args.unsupervised :
         from data.dataset_brain import TrainDataset_Brain
         dataset_class = TrainDataset_Brain
-        
     dataset = dataset_class(root_dir=root_dir,
                             anomaly_source_path=args.anomal_source_path,
                             anomal_position_source_path=args.anomal_position_source_path,
