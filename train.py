@@ -138,7 +138,7 @@ def main(args):
             image = batch['image'].to(dtype=weight_dtype) # 1,3, 512,512
             gt = batch['gt'].to(dtype=weight_dtype) # 1, 64,64
 
-            if args.do_self_aug :
+            if args.do_self_aug : # i did not do self aug !!
                 if batch['is_ok'] == 1:
                     """ normal sample """
                     image = batch['augment_img'].to(dtype=weight_dtype)

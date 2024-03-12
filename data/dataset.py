@@ -420,7 +420,7 @@ class TrainDataset_Unsupervised(Dataset):
             new_np = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1], type='RGB')  # np.array,
         rgb_pil = np.array(Image.fromarray(new_np.astype(np.uint8)).convert('RGB'))
 
-        # [5] make pseudo anomal
+        # [5] make pseudo anomal (all normal sample)
         is_ok = 1
         """ normal sample, make pseudo sample"""
         anomal_src_idx = idx % len(self.anomaly_source_paths)
@@ -448,7 +448,7 @@ class TrainDataset_Unsupervised(Dataset):
         else:
             input_ids = torch.tensor([0])
 
-        return {'image': self.transform(rgb_pil),  # [3,512,512]
+        return {'image': self.transform(anomal_pil), 
                 "gt": anomal_mask_torch,  # [1, 64, 64]
                 'input_ids': input_ids.squeeze(0),
                 'is_ok': is_ok,
