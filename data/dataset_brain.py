@@ -3,7 +3,7 @@ import numpy as np
 from torch.utils.data import Dataset
 import torch
 import glob
-from PIL import Image
+from PIL import Image, ImageFilter
 from torchvision import transforms
 import cv2
 from data.perlin import rand_perlin_2d_np
