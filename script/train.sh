@@ -2,12 +2,12 @@
 #
 port_number=50016
 category="medical"
-obj_name="chest"
-benchmark="Pneumothorax_Segmentation_Challenge_2"
-trigger_word='teeth'
+obj_name="brain"
+benchmark="NFBS"
+trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="2_supervised_normal_anormal_2_4"
+file_name="4_unsupervised_simplex_noise_beta_0"
 #--unsupervised
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_config \
  --main_process_port $port_number ../train.py --log_with wandb \
@@ -27,3 +27,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_config \
  --max_perlin_scale 4 \
  --max_beta_scale 0.3 \
  --min_beta_scale 0.1
+ --do_self_aug --trg_beta
