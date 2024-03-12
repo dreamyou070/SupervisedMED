@@ -19,7 +19,7 @@ def call_dataset(args) :
         dataset_class = TrainDataset_Unsupervised
         
     if args.trigger_word == 'brain' and args.unsupervised :
-        from dataset_brain import TrainDataset_Brain
+        from data.dataset_brain import TrainDataset_Brain
         dataset_class = TrainDataset_Brain
         
     dataset = dataset_class(root_dir=root_dir,
