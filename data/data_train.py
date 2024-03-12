@@ -1,6 +1,6 @@
 import os
 
-base_folder = 'home/dreamyou070/MyData/anomaly_detection/medical/brain/NFBS/train'
+base_folder = r'/home/dreamyou070/MyData/anomaly_detection/medical/brain/NFBS/train'
 
 
 nefb_dataset_folder = os.path.join(base_folder, 'nefb_dataset_1')
