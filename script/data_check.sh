@@ -7,7 +7,7 @@ benchmark="NFBS"
 trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="4_unsupervised_simplex_noise_trg_beta_0"
+file_name="4_unsupervised_dtd_noise_beta_0.0_0.5"
 #--do_self_aug
 
 python ../data_check.py --log_with wandb \
@@ -15,7 +15,7 @@ python ../data_check.py --log_with wandb \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 30 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
- --anomal_source_path "../../../MyData/noise_source" \
+ --anomal_source_path "../../../MyData/anomal_source_l_mode" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --max_beta_scale 0.3 \
