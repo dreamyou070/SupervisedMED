@@ -96,6 +96,8 @@ class TrainDataset_Brain(Dataset):
 
     def __getitem__(self, idx):
 
+        is_ok = 1
+
         img_idx = idx % len(self.image_paths)
         img_path = self.image_paths[img_idx]
 
