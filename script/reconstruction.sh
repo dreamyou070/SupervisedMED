@@ -2,12 +2,12 @@
 
 port_number=50002
 category="medical"
-obj_name="brain"
-benchmark="brain_tumor_mrcnn"
-caption='brain'
+obj_name="chest"
+benchmark="Pneumothorax_Segmentation_Challenge"
+caption='chest'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="4_unsupervised_simplex_noise_beta_0.0_0.3"
+file_name="2_supervised_normal_anormal_2_4"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
