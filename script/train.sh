@@ -2,12 +2,12 @@
 #
 port_number=50055
 category="medical"
-obj_name="brain"
-benchmark="NFBS"
-trigger_word='brain'
+obj_name="chest"
+benchmark="Pneumothorax_Segmentation_Challenge_2"
+trigger_word='chest'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="4_unsupervised_with_anomal_position"
+file_name="2_supervised_normal_anormal_2_9"
 #--unsupervised
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
@@ -23,5 +23,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
- --anomal_position_source_path "../../../MyData/random_shape/${obj_name}" \
- --do_self_aug --unsupervised
+ --anomal_position_source_path "../../../MyData/random_shape/${obj_name}"
