@@ -75,6 +75,19 @@ class TrainDataset_Brain(Dataset):
         np_img = np.array(((torch_img + 1) / 2) * 255).astype(np.uint8).transpose(1, 2, 0)
         pil = Image.fromarray(np_img)
 
+    def load_image(self, image_path, trg_h, trg_w, type='RGB'):
+        image = Image.open(image_path)
+        if type == 'RGB' :
+            if not image.mode == "RGB":
+                image = image.convert("RGB")
+        elif type == 'L':
+            if not image.mode == "L":
+                image = image.convert("L")
+        if trg_h and trg_w:
+            image = image.resize((trg_w, trg_h), Image.BICUBIC)
+        img = np.array(image, np.uint8)
+        return img
+
     def get_input_ids(self, caption):
         tokenizer_output = self.tokenizer(caption, padding="max_length", truncation=True, return_tensors="pt")
         input_ids = tokenizer_output.input_ids
