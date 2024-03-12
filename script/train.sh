@@ -1,13 +1,13 @@
 # !/bin/bash
 #
-port_number=50012
+port_number=50013
 category="medical"
 obj_name="brain"
 benchmark="NFBS"
 trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="4_unsupervised_simplex_noise_beta_0.0_0.3"
+file_name="4_unsupervised_simplex_noise_beta_0.1_0.3"
 #--unsupervised
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train.py --log_with wandb \
@@ -15,7 +15,7 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 100 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
- --anomal_source_path "../../../MyData/noise_source" \
+ --anomal_source_path "../../../MyData/anomal_source_l_mode" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --do_map_loss \
