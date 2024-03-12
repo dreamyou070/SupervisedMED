@@ -81,7 +81,10 @@ class TrainDataset_Brain(Dataset):
         attention_mask = tokenizer_output.attention_mask
         return input_ids, attention_mask
 
-    def __getitem__(self, idx):        
+    def __getitem__(self, idx):
+
+        img_idx = idx % len(self.image_paths)
+        img_path = self.image_paths[img_idx]
 
         # [1.1] anomal pure position
         anomal_position_idx = idx % len(self.anomal_position_source_paths)
@@ -101,8 +104,6 @@ class TrainDataset_Brain(Dataset):
         anomal_mask = mask_blur * object_mask
 
         # [2] origin image
-        img_idx = idx % len(self.image_paths)
-        img_path = self.image_paths[img_idx]
         origin_np = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1], type='L')  # np.array,
         img = self.load_image(img_path, self.resize_shape[0], self.resize_shape[1], type='RGB')  # np.array,
 
