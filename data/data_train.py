@@ -4,7 +4,7 @@ base_folder = 'home/dreamyou070/MyData/anomaly_detection/medical/brain/NFBS/trai
 
 
 nefb_dataset_folder = os.path.join(base_folder, 'nefb_dataset_1')
-normal_folder = os.path.join(base_fodler, '1_normal')
+normal_folder = os.path.join(base_folder, '1_normal')
 os.makedirs(normal_folder, exist_ok = True)
 normal_xray_folder = os.path.join(normal_folder, 'xray')
 os.makedirs(normal_xray_folder, exist_ok = True)
