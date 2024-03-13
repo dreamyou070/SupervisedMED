@@ -238,10 +238,14 @@ class TrainDataset(Dataset):
         if gt_torch.sum() == 0 :
             is_ok = 1
             """ normal sample, make pseudo sample"""
-            anomal_src_idx = idx % len(self.anomaly_source_paths)
-            anomal_dir = self.anomaly_source_paths[anomal_src_idx]
-            pseudo_np = self.load_image(anomal_dir,
-                                        self.resize_shape[0], self.resize_shape[1],type='RGB')
+            if len(self.anomaly_source_paths) > 0 :
+                anomal_src_idx = idx % len(self.anomaly_source_paths)
+                anomal_dir = self.anomaly_source_paths[anomal_src_idx]
+                pseudo_np = self.load_image(anomal_dir,
+                                            self.resize_shape[0], self.resize_shape[1], type='RGB')
+            else :
+                pseudo_np = img
+
             # [2] mask
             anomal_img, anomal_mask_torch = self.augment_image(img, pseudo_np,
                                                                argument.min_perlin_scale,
