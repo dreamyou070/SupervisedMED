@@ -3,11 +3,11 @@
 port_number=50056
 category="medical"
 obj_name="brain"
-benchmark="NFBS"
+benchmark="NFBS_preprocess"
 trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="5_unsupervised_with_normal_sample_anomal_position"
+file_name="6_unsupervised_skull_stripped_with_normal_sample_anomal_position"
 # --unsupervised
 # --anomal_source_path "../../../MyData/anomal_source_l_mode" \
 # --anomal_position_source_path "../../../MyData/random_shape/${obj_name}"
