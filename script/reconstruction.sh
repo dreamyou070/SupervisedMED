@@ -1,13 +1,13 @@
 # !/bin/bash
 
-port_number=50002
+port_number=50003
 category="medical"
-obj_name="teeth"
-benchmark="kaggle"
+obj_name="brain"
+benchmark="BraTS2020"
 caption='teeth'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="22_supervised_kaggle"
+file_name="4_unsupervised_with_anomal_position"
 
 # --use_position_embedder
 # --vae_pretrained_dir "/home/dreamyou070/SupervisedMED/result/Tuft/vae_train/train_vae_reconstruction_nomal_data/vae_models/vae_104.safetensors" \
@@ -24,4 +24,4 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_config \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
- --threds [0.3,0.4] --use_position_embedder --test_with_xray
+ --threds [0.5] --use_position_embedder --test_with_xray
