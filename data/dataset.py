@@ -102,7 +102,8 @@ class TrainDataset(Dataset):
         self.caption = caption
         self.tokenizer = tokenizer
         self.transform = transforms.Compose([transforms.ToTensor(),
-                                             transforms.Normalize([0.5], [0.5]),])
+                                             transforms.Normalize([0.5],
+                                                                  [0.5]),])
         self.image_paths = image_paths
         self.gt_paths = gt_paths
         self.object_masks = object_masks
