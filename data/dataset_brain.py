@@ -105,7 +105,7 @@ class TrainDataset_Brain(Dataset):
         anomal_position_idx = idx % len(self.anomal_position_source_paths)
         anomal_position_file_path = self.anomal_position_source_paths[anomal_position_idx]
         mask = Image.open(anomal_position_file_path).convert('L')
-        mask_blur = mask.filter(ImageFilter.GaussianBlur(3)).resize((self.resize_shape[0], self.resize_shape[1]))
+        mask_blur = mask.filter(ImageFilter.GaussianBlur(2)).resize((self.resize_shape[0], self.resize_shape[1]))
         mask_blur = np.array(mask_blur) / 255
 
         # [1.2] object mask
