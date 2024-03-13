@@ -2,7 +2,7 @@
 #
 port_number=50055
 category="medical"
-obj_name="dental"
+obj_name="teeth"
 benchmark="kaggle"
 trigger_word='chest'
 layer_name='layer_3'
