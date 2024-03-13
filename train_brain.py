@@ -173,7 +173,7 @@ def main(args):
                 normal_activator.collect_anomal_map_loss(local_attn, anomal_position_vector, )
 
             # ------------------------------------------------------------------------------------------------------------
-            if args.do_anormal_sample :
+            if args.do_anomal_sample :
                 if args.do_self_aug : # i did not do self aug !!
                     if batch['is_ok'] == 1:
                         """ normal sample """
