@@ -16,7 +16,7 @@ python ../data_check.py --log_with wandb \
  --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 30 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
- --anomal_position_source_path "../../../MyData/random_shape/brain" \
+ --anomal_position_source_path "../../../MyData/random_shape/braTS2020" \
  --anomal_source_path "../../../MyData/anomal_source_l_mode" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \

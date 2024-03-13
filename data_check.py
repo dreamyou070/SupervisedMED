@@ -181,6 +181,7 @@ if __name__ == "__main__":
     parser.add_argument("--trg_beta", type=float)
     parser.add_argument("--rgb_train", action = 'store_true')
     parser.add_argument("--unsupervised", action='store_true')
+    parser.add_argument("--anomal_position_source_path", type = str)
     # -----------------------------------------------------------------------------------------------------------------
     args = parser.parse_args()
     unet_passing_argument(args)
