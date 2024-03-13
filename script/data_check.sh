@@ -20,5 +20,5 @@ python ../data_check.py --log_with wandb \
  --anomal_source_path "../../../MyData/anomal_source_l_mode" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
- --max_beta_scale 0.3 \
+ --max_beta_scale 0.1 \
  --min_beta_scale 0.0 --unsupervised
