@@ -3,7 +3,7 @@
 port_number=50002
 category="medical"
 obj_name="brain"
-benchmark="brain_tumor_mrcnn"
+benchmark="BR35"
 caption='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
