@@ -133,11 +133,11 @@ class TrainDataset_Brain(Dataset):
         A = beta * origin_np + (1 - beta) * anomal_source_np.astype(np.float32)  # merged
         augmented_image = (origin_np * (1 - anomal_mask) + A * anomal_mask).astype(np.float32)
         anomal_np = np.array(Image.fromarray(augmented_image.astype(np.uint8)), np.uint8)
-
+        anomal_pil = Image.fromarray(anomal_np.astype(np.uint8)).convert('RGB')
+        anomal_np = np.array(anomal_pil)
 
         #anomal_np = origin_np * (1 - anomal_mask) + (anomal_mask) * anomal_source_np
-        #anomal_pil = Image.fromarray(anomal_np.astype(np.uint8)).convert('RGB')
-        #anomal_np = np.array(anomal_pil)
+
         
         # [5] 
         gt_pil = Image.fromarray((anomal_mask * 255).astype(np.uint8)).resize((self.latent_res, self.latent_res))
