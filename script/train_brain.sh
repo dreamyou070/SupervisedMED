@@ -7,7 +7,7 @@ benchmark="NFBS_preprocess"
 trigger_word='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
-file_name="6_unsupervised_skull_stripped_with_normal_sample_anomal_position"
+file_name="7_unsupervised_skull_stripped_with_normal_sample_anomal_position"
 # --unsupervised
 # --anomal_source_path "../../../MyData/anomal_source_l_mode" \
 # --anomal_position_source_path "../../../MyData/random_shape/${obj_name}"
@@ -19,7 +19,7 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
  --anomal_position_source_path "../../../MyData/random_shape/braTS2020" \
- --anomal_source_path "../../../MyData/anomal_source_l_mode_neat" \
+ --anomal_source_path "../../../MyData/kth" \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --do_map_loss \
@@ -31,6 +31,7 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --do_attn_loss --attn_loss_weight 1.0 --do_cls_train --normal_weight 1 \
  --do_self_aug \
  --do_normal_sample --do_anomal_sample \
- --max_beta_scale 0.1 \
- --min_beta_scale 0.0 \
+ --trigger_word "${trigger_word}" \
+ --obj_name "${obj_name}" \
+ --trg_beta 0.4 \
  --unsupervised
