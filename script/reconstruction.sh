@@ -3,7 +3,7 @@
 port_number=50003
 category="medical"
 obj_name="brain"
-benchmark="BraTS2020"
+benchmark="BraTS2020_T1weighted"
 caption='brain'
 layer_name='layer_3'
 sub_folder="up_16_32_64"
