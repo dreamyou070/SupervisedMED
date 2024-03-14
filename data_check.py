@@ -190,7 +190,5 @@ if __name__ == "__main__":
     from data.dataset import passing_mvtec_argument
     passing_mvtec_argument(args)
     from data.dataset_brain import passing_mvtec_argument as passing_mvtec_argument_brain
-
     passing_mvtec_argument_brain(args)
-
     main(args)
