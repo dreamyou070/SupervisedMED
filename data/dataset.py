@@ -87,7 +87,6 @@ class TrainDataset(Dataset):
             folder_dir = os.path.join(self.root_dir, folder)
             rgb_folder = os.path.join(folder_dir, 'xray')
             gt_folder = os.path.join(folder_dir, 'gt')
-            print(f'rgb_folder = {rgb_folder}')
             images = os.listdir(rgb_folder)
             for image in images :
                 for _ in range(int(repeat)) :
