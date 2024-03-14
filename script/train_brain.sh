@@ -15,7 +15,7 @@ file_name="7_unsupervised_skull_stripped_with_normal_sample_anomal_position"
 accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --main_process_port $port_number ../train_brain.py --log_with wandb \
  --output_dir "../../result/${category}/${obj_name}/${layer_name}/${sub_folder}/${file_name}" \
- --train_unet --train_text_encoder --start_epoch 7 --max_train_epochs 93 \
+ --train_unet --train_text_encoder --start_epoch 0 --max_train_epochs 60 \
  --pretrained_model_name_or_path ../../../pretrained_stable_diffusion/stable-diffusion-v1-5/v1-5-pruned.safetensors \
  --data_path "../../../MyData/anomaly_detection/${category}/${obj_name}/${benchmark}" \
  --anomal_position_source_path "../../../MyData/random_shape/braTS2020" \
@@ -23,8 +23,6 @@ accelerate launch --config_file ../../../gpu_config/gpu_0_1_2_3_4_5_config \
  --trigger_word "${trigger_word}" \
  --obj_name "${obj_name}" \
  --do_map_loss \
- --network_weights "../../result/${category}/${obj_name}/${layer_name}/${sub_folder}/${file_name}/models/epoch-000007.safetensors" \
- --position_embedder_weights "../../result/${category}/${obj_name}/${layer_name}/${sub_folder}/${file_name}/position_embedder/position_embedder_7.safetensors" \
  --trg_layer_list "['up_blocks_1_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_2_attentions_2_transformer_blocks_0_attn2',
                     'up_blocks_3_attentions_2_transformer_blocks_0_attn2',]" \
